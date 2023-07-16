@@ -1,0 +1,56 @@
+# The Spatial Linear Model {#sec-basics}
+
+__Goals__:
+
+* Explain how the spatial linear model differs from the linear model with independent random errors.
+* Explain how modeling for point-referenced data with distance-based model covariances differs from modeling for areal data with neighborhood-based model covariances.
+
+## Introducing the Spatial Linear Model
+
+Statistical linear models are often parameterized as 
+
+$$
+\mathbf{y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\epsilon},
+$$ {#eq-lm}
+
+where for a sample size $n$, $\mathbf{y}$ is an $n \times 1$ column vector of response variables, $\mathbf{X}$ is an $n \times p$ design (model) matrix of explanatory variables, $\boldsymbol{\beta}$ is a $p \times 1$ column vector of fixed effects controlling the impact of $\mathbf{X}$ on $\mathbf{y}$, and $\boldsymbol{\epsilon}$ is an $n \times 1$ column vector of random errors. We typically assume that $\text{E}(\boldsymbol{\epsilon}) = \mathbf{0}$ and $\text{Cov}(\boldsymbol{\epsilon}) = \sigma^2_\epsilon \mathbf{I}$, where $\text{E}(\cdot)$ denotes expectation, $\text{Cov}(\cdot)$ denotes covariance, $\sigma^2_\epsilon$ denotes a variance parameter, and $\mathbf{I}$ denotes the identity matrix.
+
+To accommodate spatial dependence in $\mathbf{y}$, an $n \times 1$ spatial random effect, $\boldsymbol{\tau}$, is added to @eq-lm, yielding the model
+
+$$ 
+\mathbf{y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\tau} + \boldsymbol{\epsilon},
+$$ {#eq-splm}
+
+where $\boldsymbol{\tau}$ is independent of $\boldsymbol{\epsilon}$, $\text{E}(\boldsymbol{\tau}) = \mathbf{0}$, $\text{Cov}(\boldsymbol{\tau}) = \sigma^2_\tau \mathbf{R}$, and $\mathbf{R}$ is a matrix that determines the spatial dependence structure in $\mathbf{y}$ and depends on a range parameter, $\phi$, which controls the behavior of the spatial covariance as a function of distance. We discuss $\mathbf{R}$ in more detail shortly. The parameter $\sigma^2_\tau$ is called the spatially dependent random error variance or partial sill. The parameter $\sigma^2_\epsilon$ is called the spatially independent random error variance or nugget. These two variance parameters are henceforth more intuitively written as $\sigma^2_{de}$ and $\sigma^2_{ie}$, respectively. The covariance of $\mathbf{y}$ is denoted $\boldsymbol{\Sigma}$ and given by $\sigma^2_{de} \mathbf{R} + \sigma^2_{ie} \mathbf{I}$. The parameters that compose this covariance are contained in the vector $\boldsymbol{\theta}$, which is called the covariance parameter vector.
+
+@eq-splm is called the spatial linear model. The spatial linear model applies to both point-referenced and areal (i.e., lattice) data. Spatial data are point-referenced when the elements in $\mathbf{y}$ are observed at point-locations indexed by x-coordinates and y-coordinates on a spatially continuous surface with an infinite number of locations. For example, consider sampling soil at any point-location in a field. Spatial data are areal when the elements in $\mathbf{y}$ are observed as part of a finite network of polygons whose connections are indexed by a neighborhood structure. For example, the polygons may represent states in a country who are neighbors if they share at least one boundary. 
+
+## Modeling Covariance in the Spatial Linear Model
+
+A primary way in which the model in @eq-splm differs for point-referenced and areal data is the way in which $\mathbf{R}$ in $\text{Cov}(\boldsymbol{\tau}) = \sigma^2_{de} \mathbf{R}$ is modeled. For point-referenced data, the $\mathbf{R}$ matrix is generally constructed using the Euclidean distance between spatial locations. For example, the exponential spatial covariance function generates an $\mathbf{R}$ matrix given by
+
+$$
+\mathbf{R} = \exp(-\mathbf{H} / \phi),
+$$ {#eq-Rpoint}
+
+where $\mathbf{H}$ is a matrix of Euclidean distances among observations and $\phi$ is the range parameter. Some spatial covariance functions have an extra parameter -- one example is the Matérn covariance. Spatial models for point-referenced data are fit in `spmodel` using the `splm()` function.
+
+On the other hand, $\mathbf{R}$ for areal data is often constructed from how the areal polygons are oriented in space. Commonly, a neighborhood structure is used to construct $\mathbf{R}$, where two observations are considered to be "neighbors" if they share a common boundary. In the simultaneous auto-regressive (SAR) model, 
+
+$$
+\mathbf{R} = [(\mathbf{I} - \phi \mathbf{W}) (\mathbf{I} - \phi \mathbf{W}^\top)]^{-1}
+$$ {#eq-Rareal}
+
+where $\mathbf{I}$ is the identity matrix and $\mathbf{W}$ is a weight matrix that describes the neighborhood structure among observations. A popular neighborhood structure is __queen contiguity__, in which two polygons are neighbors if they share a boundary. It is important to clarify that observations are not considered neighbors with themselves.  Spatial models for areal data are fit in `spmodel` using the `spautor()` function.
+
+::: {.callout-important icon="false"}
+## Exercise
+
+Navigate to the Help file for `splm` by running `?splm` or by visiting [this link](https://usepa.github.io/spmodel/reference/splm.html) and scroll down to "Details." Examine the spatial linear model description in the Help file and relate some of the syntax used to the syntax in @eq-splm and @eq-Rpoint.
+:::
+
+::: {.callout-important icon="false" collapse="true"}
+## Solution
+
+The form of the spatial linear model ($\mathbf{y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\tau} + \boldsymbol{\epsilon}$) is the same in the Help file as the form in Equation @eq-splm. In the help file, $de$ refers to $\sigma^2_{de}$, $ie$ refers to $\sigma^2_{ie}$, and $range$ refers to $\phi$. Finally, in the help file $h$ refers to distance between observations while, in @eq-Rpoint, $\mathbf{H}$ refers to a matrix of these distances for all pairs of observations.
+:::

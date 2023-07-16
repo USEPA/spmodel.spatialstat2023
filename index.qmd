@@ -1,0 +1,75 @@
+# Introduction {#sec-intro .unnumbered}
+
+```{r}
+#| echo: false
+library(emo)
+```
+
+Hello `r emo::ji("wave")` and welcome! The purpose of this site is to provide workshop materials for the `spmodel` workshop at the 2023 Spatial Statistics Conference `r emo::ji("earth_americas")`. Slides that accompany this workshop can be found at INSERT LINK HERE.
+
+__What is `spmodel`?__ The `spmodel` `R` package [@dumelle2023spmodel] can be used to fit, summarize, and predict for a variety of spatial statistical models. Some of the things that `spmodel` can do include:
+
+* Fit spatial linear and generalized linear models for point-referenced and areal (lattice) data
+* Compare model fits and inspect model diagnostics
+* Predict at unobserved spatial locations (i.e., Kriging)
+* And much more!
+
+__Why use `spmodel`?__ There are many great spatial modeling packages in `R`. A few reasons to use `spmodel` for spatial analysis are that:
+
+* `spmodel` syntax is similar to base `R` syntax for functions like `lm()`, `glm()`, `summary()`, and `predict()`, making the transition from fitting non-spatial models to spatial models relatively seamless.
+* There are a wide variety of `spmodel` capabilities that give the user significant control over the specific spatial model being fit.
+* `spmodel` is compatible with other modern `R` packages like `broom` and `sf`.
+
+Throughout the rest of these materials, we introduce `spmodel` through a few applied examples. We connect basic summary output with the spatial linear model for both point-referenced and areal (lattice) data. We discuss prediction and generalized linear spatial models for response variables whose distribution is not Gaussian. Along the way, we mention a few other advanced `spmodel` features.
+
+__Workshop Summary.__ The `spmodel` `R` package can be used to fit, summarize, and predict for a variety of spatial statistical models for both point-referenced and areal spatial data. What distinguishes `spmodel` from many other `R` packages for modeling spatial data is (1) a syntactic structure similar to the syntactic structure of base `R` functions `lm()` and `glm()` that makes `spmodel` relatively easy to learn, (2) the breadth of options that give the user a high amount of control over the model being fit, and (3) compatibility with other modern `R` packages like `broom` and `sf`. By the end of this workshop, participants can expect to be able to use `spmodel` to fit spatial linear models for point-referenced and areal (lattice) data, make predictions for unobserved spatial locations, fit anisotropic models for point-referenced data, fit spatial models with additional non-spatial random effects, fit generalized linear models for spatial data, and use big data methods to analyze large spatial data sets. More information on `spmodel` can be found on our website at [https://usepa.github.io/spmodel/](https://usepa.github.io/spmodel/). 
+
+::: {.callout-tip}
+## Technical Details
+
+`spmodel`'s [Technical Details Vignette](https://usepa.github.io/spmodel/articles/technical.html) contains the technical details for all functions in `spmodel` that perform computations.
+
+:::
+
+## Author Introduction
+
+Michael Dumelle is a statistician for the United States Environmental Protection Agency (USEPA). He works primarily on facilitating the survey design and analysis of USEPA's National Aquatic Resource Surveys (NARS), which characterize the condition of waters across the United States. His primary research interests are in spatial statistics, survey design, environmental and ecological applications, and software development.
+
+Matt Higham is an assistant professor of statistics at St. Lawrence University, a small liberal arts college in Canton, New York. His primary research interests are in spatial statistics and in applications of statistics to ecological settings. He enjoys using `R` to teach undergraduate students the foundations of statistical computing and data science.
+
+Jay Ver Hoef is a senior scientist and statistician for the Marine Mammal Lab, part of the Alaska Fisheries Science Center of NOAA Fisheries, located in Seattle, Washington, although Jay lives in Fairbanks, Alaska.  He is a fellow of the American Statistical Association, and Jay consults on a wide variety of topics related to marine mammals and stream networks. His main statistical interests are in spatial statistics and Bayesian statistics, especially applied to ecological and environmental data.
+
+## Set Up
+
+The packages that we use throughout this bundle include `spmodel` and `ggplot2`. To install and load them, run
+
+```{r}
+#| warning: false
+#| echo: false
+
+library(spmodel)
+library(ggplot2)
+```
+
+```{r}
+#| eval: false
+
+install.packages("spmodel")
+library(spmodel)
+install.packages("ggplot2")
+library(ggplot2)
+```
+
+## Citation Information
+
+If you use `spmodel` in a formal report or publication, please cite it:
+
+```{r}
+citation(package = "spmodel")
+```
+
+The `spmodel` journal article associated with the citation is [linked here](https://doi.org/10.1371/journal.pone.0282524).
+
+## Disclaimer
+
+The views expressed in this manuscript are those of the authors and do not necessarily represent the views or policies of the U.S. Environmental Protection Agency or the U.S. National Oceanic and Atmospheric Administration. Any mention of trade names, products, or services does not imply an endorsement by the U.S. government, the U.S. Environmental Protection Agency, or the U.S. National Oceanic and Atmospheric Administration. The U.S. Environmental Protection Agency and the U.S. National Oceanic and Atmospheric Administration do not endorse any commercial products, services, or enterprises.

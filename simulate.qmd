@@ -1,0 +1,90 @@
+# Simulating Data {#sec-simulate}
+
+```{r source_r, echo = FALSE}
+source("_common.R")
+```
+
+Throughout this section, we will simulate spatially-correlated data using a variety of `spmodel` functions. It is often useful to simulate spatial data with "known" spatial covariance parameters and study the suitability of models fit to these data.  We will use the `spmodel` package and `ggplot2` package:
+
+```{r}
+library(spmodel)
+library(ggplot2)
+```
+
+__Goals__: 
+
+* Simulate spatial Gaussian data using `sprnorm()`.
+* Simulate spatial binary, proportion, count, and skewed data using `sprbinom()`, `sprbeta()`, `sprpois()`, `sprnbinom()`, `sprgamma()`, and `sprinvgauss()`.
+
+## Simulating Spatial Gaussian Data {#sec-simulate-gauss}
+
+We simulate Gaussian spatial data using `sprnorm()`. `sprnorm()` is similar in structure to `rnorm()` for simulating non-spatial Gaussian data. The first argument to `sprnorm()` is `spcov_params`, which is a spatial covariance parameter object created with `spcov_params()`:
+```{r}
+params <- spcov_params("exponential", de = 1, ie = 0.5, range = 5e5)
+```
+
+::: {.callout-note}
+ When the `type` argument to `coef()` is `"spcov"`, the estimated spatial covariance parameters are returned as an `spcov_params` object, naturally usable simulation-based contexts that require conditioning on these estimated parameters.
+:::
+
+`sprnorm()` simulates data at each location in `data` for each of `n` samples (specified via `n`) with some mean vector (specified via `mean`). We simulate one realization of zero-mean Gaussian data with spatial covariance structure from `params` at each location in the `sulfate` data by running
+```{r}
+set.seed(1)
+sulfate$z <- sprnorm(params, data = sulfate)
+```
+
+We visualize this realization by running
+```{r}
+ggplot(sulfate, aes(color = z)) +
+  geom_sf() +
+  scale_color_viridis_c() +
+  theme_gray(base_size = 14)
+```
+
+We visualize an empirical semivariogram of this realization by running
+```{r}
+esv_out <- esv(z ~ 1, sulfate)
+ggplot(esv_out, aes(x = dist, y = gamma, size = np)) +
+  geom_point() +
+  lims(y = c(0, NA)) +
+  theme_gray(base_size = 14)
+```
+
+## Simulating Other Spatial Data {#sec-simulate-other}
+
+`spmodel` has a variety of additional simulation functions used to simulate binary, proportion, count, and skewed data:
+
+* Binary data: `sprbinom()`
+* Proportion data: `sprbeta()`
+* Count data: `sprpois()` and `sprnbinom()`
+* Skewed data: `sprgamma()` and `sprinvgauss()`
+
+With these simulation functions, the spatial covariance parameters and mean vector are specified on the appropriate link scale. For `sprbinom()` and `sprbeta()`, this is the logit link scale. For the other functions, this is the log link scale. We simulate one realization of Poisson data where on the link scale, the mean is zero and the spatial covariance structure is specified via `params`, by running
+```{r}
+sulfate$p <- sprpois(params, data = sulfate)
+```
+
+We visualize this realization by running
+```{r}
+ggplot(sulfate, aes(color = p)) +
+  geom_sf() +
+  scale_color_viridis_c() +
+  theme_gray(base_size = 14)
+```
+
+::: {.callout-caution}
+## Caution
+
+Simulating spatial data in `spmodel` requires the Cholesky decomposition of the covariance matrix, which can take awhile for sample sizes exceeding 10,000. Regardless of the number of realizations simulated, this Cholesky decompsition is only needed once, which means that simulating many realizations (via `samples`) takes nearly the same time as simulating just one.
+
+:::
+
+## R Code Appendix
+
+```{r get-labels, echo = FALSE}
+labs = knitr::all_labels()
+labs = setdiff(labs, c("source_r", "get-labels"))
+```
+
+```{r all-code, ref.label=labs, eval = FALSE}
+```

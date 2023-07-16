@@ -1,0 +1,37 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "spmodel Workshop"
+  author: "Michael Dumelle, Matt Higham, and Jay Ver Hoef"
+  page-footer:
+    left: |
+      spmodel workshop materials written by Michael Dumelle, Matt Higham, and Jay Ver Hoef
+    right: |
+      This book was built with <a href="https://quarto.org/">Quarto</a>.
+  chapters:
+    - index.qmd
+    - basics.qmd
+    - spatial-linear-model.qmd
+    - model-fitting.qmd
+    - prediction.qmd
+    - additional-features.qmd
+    - large-data-sets.qmd
+    - generalized.qmd
+    - simulate.qmd
+    - areal-data.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme:
+      - cosmo
+      - ds234.scss
+    code-link: true
+
+
+
+

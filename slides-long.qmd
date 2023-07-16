@@ -1,0 +1,1142 @@
+---
+title: "spmodel Workshop"
+subtitle: "Spatial Statistics 2023: Climate and the Environment"
+date: July 18, 2023
+format:
+  revealjs:
+    author: 
+      - "Michael Dumelle (presenting)"
+      - "Matt Higham (presenting)"
+      - "Jay M Ver Hoef"
+    institute: 
+      - "EPA (USA)"
+      - "St. Lawrence University (USA)"
+      - "NOAA (USA)"
+    footer: "spmodel Workshop"
+    slide-number: true
+    preview-links: true
+    transition: fade
+    theme: [default, slides.scss]
+    smaller: false
+    auto-stretch: true
+    code-link: true
+    incremental: false
+execute: 
+  echo: true
+embed-resources: true
+bibliography: references.bib
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+# set width of code output
+options(width = 80)
+
+# load background packages
+library(countdown)
+library(spmodel)
+library(ggplot2)
+```
+
+## Welcome!
+
+1.  Install and load R packages
+
+```{r}
+#| eval: false
+
+install.packages("spmodel")
+library(spmodel)
+install.packages("ggplot2")
+library(ggplot2)
+```
+
+2.  Please visit INSERT LINK HERE to view the workshop's accompanying workbook
+3.  Please visit INSERT LINK HERE to view the workshop's slides
+4.  Follow along and have fun!
+
+## Who Are We?
+
+Michael Dumelle is a statistician for the United States Environmental Protection Agency (USEPA). He works primarily on facilitating the survey design and analysis of USEPA's National Aquatic Resource Surveys (NARS), which characterize the condition of waters across the United States. His primary research interests are in spatial statistics, survey design, environmental and ecological applications, and software development.
+
+## Who Are We?
+
+Matt Higham is an assistant professor of statistics at St. Lawrence University, a small liberal arts college in Canton, New York. His primary research interests are in spatial statistics and in applications of statistics to ecological settings. He enjoys using `R` to teach undergraduate students the foundations of statistical computing and data science.
+
+## Who Are We?
+
+Jay Ver Hoef is a senior scientist and statistician for the Marine Mammal Lab, part of the Alaska Fisheries Science Center of NOAA Fisheries, located in Seattle, Washington, although Jay lives in Fairbanks, Alaska. He is a fellow of the American Statistical Association, and Jay consults on a wide variety of topics related to marine mammals and stream networks. His main statistical interests are in spatial statistics and Bayesian statistics, especially applied to ecological and environmental data.
+
+## Disclaimer
+
+The views expressed in this workshop are those of the authors and do not necessarily represent the views or policies of the U.S. Environmental Protection Agency or the U.S. National Oceanic and Atmospheric Administration. Any mention of trade names, products, or services does not imply an endorsement by the U.S. government, the U.S. Environmental Protection Agency, or the U.S. National Oceanic and Atmospheric Administration. The U.S. Environmental Protection Agency and the U.S. National Oceanic and Atmospheric Administration do not endorse any commercial products, services, or enterprises.
+
+## What is `spmodel`?
+
+`spmodel` is an `R` package to fit, summarize, and predict for a variety of spatial statistical models. Some of the things that `spmodel` can do include:
+
+::: incremental
+-   Fit spatial linear and generalized linear models for point-referenced and areal (lattice) data
+-   Compare model fits and inspect model diagnostics
+-   Predict at unobserved spatial locations (i.e., Kriging)
+-   And much more!
+:::
+
+## Why use `spmodel`?
+
+There are many great spatial modeling packages in `R`. A few reasons to use `spmodel` for spatial analysis are that:
+
+::: incremental
+-   `spmodel` syntax is similar to base `R` syntax for functions like `lm()`, `glm()`, `summary()`, and `predict()`, making the transition from fitting non-spatial models to spatial models relatively seamless.
+-   There are a wide variety of `spmodel` capabilities that give the user significant control over the specific spatial model being fit.
+-   `spmodel` is compatible with other modern `R` packages like `broom` and `sf`.
+:::
+
+# The Basics
+
+## Goals
+
+::: goals
+1.  Fit a spatial linear model using `splm()`.
+2.  Tidy, glance at, and augment the fitted model.
+3.  Predict for unobserved locations (i.e., Kriging).
+:::
+
+## The Sulfate Data
+
+The `sulfate` data in `spmodel` contains data on 197 sulfate measurements in the continental United States
+
+```{r}
+head(sulfate)
+```
+
+```{r}
+#| label: fig-sulfate
+#| fig-cap: "Distribution of sulfate data."
+#| output-location: slide
+
+ggplot(sulfate, aes(color = sulfate)) +
+  geom_sf(size = 3) +
+  scale_color_viridis_c(limits = c(0, 45)) +
+  theme_gray(base_size = 18)
+```
+
+## Fitting a Model
+
+We fit and summarize a spatial linear model with an intercept by running
+
+```{r}
+spmod <- splm(sulfate ~ 1, data = sulfate, spcov_type = "exponential")
+summary(spmod)
+```
+
+## The `broom` Functions
+
+Tidy the fixed effect output
+
+```{r}
+tidy(spmod)
+```
+
+Glance at the model fit
+
+```{r}
+glance(spmod)
+```
+
+Augment the data with model diagnostics
+
+```{r}
+#| output-location: slide
+
+augment(spmod)
+```
+
+## Prediction (i.e., Kriging)
+
+```{r}
+#| results: hide
+
+predict(spmod, newdata = sulfate_preds)
+```
+
+Augment prediction data
+
+```{r}
+#| output-location: slide
+
+aug_preds <- augment(spmod, newdata = sulfate_preds)
+print(aug_preds)
+```
+
+## Prediction (i.e., Kriging)
+
+Visualize predictions
+
+```{r}
+#| label: fig-sulfate-pred
+#| fig-cap: "Distribution of sulfate data predictions."
+#| output-location: slide
+
+ggplot(aug_preds, aes(color = .fitted)) +
+  geom_sf(size = 3) +
+  scale_color_viridis_c(limits = c(0, 45)) +
+  theme_gray(base_size = 18)
+```
+
+## Your Turn
+
+::: task
+Say hi to your neighbors! What type of work or analyses do you do in the field of spatial statistics?
+
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 5)
+```
+
+## Your Turn
+
+::: task
+Visit `spmodel's` website at <https://usepa.github.io/spmodel>. Navigate to the "References" tab and explore some other functions available in `spmodel`.
+
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 5)
+```
+
+
+# The Spatial Linear Model
+
+## Goals
+
+::: goals
+1.  Explain how the spatial linear model differs from the linear model with independent random errors.
+2.  Explain how modeling for point-referenced data with distance-based model covariances differs from modeling for areal data with neighborhood-based model covariances.
+:::
+
+## Independent Random Error Model
+
+$$
+\mathbf{y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\epsilon},
+$$ {#eq-lm}
+
+-   $\boldsymbol{\epsilon}$ is a column vector of random errors.
+    -   $\text{E}(\boldsymbol{\epsilon}) = \mathbf{0}$
+    -   $\text{Cov}(\boldsymbol{\epsilon}) = \sigma^2_{ie} \mathbf{I}$
+-   $\mathbf{y}$ is a column vector of response variables, $\mathbf{X}$ is a design (model) matrix of explanatory variables, and $\boldsymbol{\beta}$ is a column vector of fixed effects.
+
+## Spatial Linear Model
+
+$$ 
+\mathbf{y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\tau} + \boldsymbol{\epsilon},
+$$ {#eq-splm}
+
+-   $\boldsymbol{\tau}$ is a random error vector independent of $\boldsymbol{\epsilon}$
+    -   $\text{E}(\boldsymbol{\tau}) = \mathbf{0}$
+    -   $\text{Cov}(\boldsymbol{\tau}) = \sigma^2_{de} \mathbf{R}$
+-   $\text{Cov}(\mathbf{y}) \equiv \boldsymbol{\Sigma} = \sigma^2_{de} \mathbf{R} + \sigma^2_{ie} \mathbf{I}$
+
+## Point-Referenced Data
+
+-   Data are point-referenced when the elements in $\mathbf{y}$ are observed at point-locations indexed by x-coordinates and y-coordinates on a spatially continuous surface with an infinite number of locations
+    -   Consider sampling soil at any point-location in a field
+-   Distance-based correlation for point-referenced data:
+    -   Exponential Correlation: $\mathbf{R} = \exp(-\mathbf{H} / \phi)$
+    -   $\mathbf{H}$ is a matrix of distances, $\phi$ is the range parameter
+-   Fit in `spmodel` using `splm()` (the workshop's focus)
+
+## Areal Data
+
+-   Data are areal when the elements in $\mathbf{y}$ are observed as part of a finite network of polygons whose connections are indexed by a neighborhood structure
+    -   The polygons may represent states in a country who are neighbors if they share at least one boundary.
+-   Neighborhood-based for areal data:
+    -   SAR Correlation: $\mathbf{R} = [(\mathbf{I} - \phi \mathbf{W}) (\mathbf{I} - \phi \mathbf{W}^\top)]^{-1}$
+    -   $\mathbf{W}$ is a weight matrix that describes the neighborhood structure, $\phi$ is the range parameter
+-   Fit in `spmodel` using `spautor()`
+
+## Your Turn
+
+::: task
+Navigate to the Help file for `splm` by running `?splm` or by visiting [this link](https://usepa.github.io/spmodel/reference/splm.html) and scroll down to "Details." Examine the spatial linear model description in the Help file and relate some of the syntax used to the syntax used in this section.
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 5)
+```
+
+## Your Turn
+
+::: task
+With your neighbor(s), verify that you reach the same conclusions in the previous exercise, relating the syntax in the Help file to the syntax in the spatial linear model from this section.
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 3)
+```
+
+# Model Fitting
+
+## Goals
+
+::: goals
+1.  Further explore the `splm()` function using the `moss` data.
+2.  Connect parameter estimates in the summary output of `splm()` to the spatial linear model.
+:::
+
+::: {.notes}
+We are now going to talk about model fitting for point-referenced data in `spmodel` in a little bit more detail. In particular, we'll see another example of using `splm()`, and this time we will focus a bit more on the connecting the summary output of `splm()` to the spatial linear model discussed in the previous section.
+:::
+
+## The Moss Data
+
+The `moss` data contains a variable for log Zinc concentration for moss samples collected near a mining road in Alaska.
+
+```{r}
+#| label: fig-moss
+#| fig-cap: "Distribution of moss data."
+#| output-location: slide
+
+ggplot(moss, aes(color = log_Zn)) +
+  geom_sf(size = 2) +
+  scale_color_viridis_c() +
+  scale_x_continuous(breaks = seq(-163, -164, length.out = 2)) +
+  theme_gray(base_size = 18)
+```
+
+::: {.notes}
+For this section, we are going to use the `moss` data set, which is an `sf` object in the `spmodel` package. In particular, we are interested in modeling the log Zinc concentration in moss tissue for some moss samples that were collected near a mining road in Alaska. From the figure, we can make out where this mining road is, running from southwest to northeast. And also from the figure, we might anticipate that distance to the road may be an important predictor, as it seems as though moss samples collected closer to the road tend to have more Zinc concentration than moss samples that are further from the road. 
+:::
+
+## The `splm()` function
+
+The `splm()` function shares syntactic structure with the `lm()` function and generally requires at least three arguments
+
+::: incremental
+1.  `formula`: a formula that describes the relationship between the response variable ($\mathbf{y}$) and explanatory variables ($\mathbf{X}$)
+2.  `data`: a `data.frame` or `sf` object that contains the response variable, explanatory variables, and spatial information.
+3.  `spcov_type`: the spatial covariance type (`"exponential"`, `"matern"`, `"spherical"`, etc; 17 total types)
+:::
+
+::: {.notes}
+As mentioned earlier, there are three basic arguments to the `splm()` function, two of which directly mirror the arguments to base `R`s `lm()` function to fit linear models with independent random errors. Both `formula` and `data` are similar to the `formula` and `data` arguments in `lm()`. The third argument `spcov_type` can be used to specify the function we want to use to model spatial correlation.
+:::
+
+## Fit a Spatial Linear Model
+
+Estimation Methods:
+
+* Restricted maximum likelihood (default; likelihood-based)
+* Maximum likelihood (likelihood-based)
+* Composite likelihood (semivariogram-based) [@curriero1999composite]
+* Weighted least squares (semivariogram-based; see `weights`) [@cressie1985fitting]
+
+```{r}
+#| output-location: slide
+spmod <- splm(formula = log_Zn ~ log_dist2road, data = moss,
+              spcov_type = "exponential")
+summary(spmod)
+```
+
+::: {.notes}
+An additional argument is the `estmethod` argument, which can be used to specify the estimation method for which parameters are estimated. By default, `splm()` uses Restricted Maximum Likelihood, but other options are maximum likelihood, composite likelihood, and weighted least squares. We will stick to REML estimation for the rest of the workshop, but feel free to mess around with this argument if you have some extra time in the exercises to explore how much the parameter estimates change for the different estimation methods.
+
+Following slide: From this summary output, we see the function call, a table of summary statistics for the model residuals, a table of fixed effect estimates and standard errors, and a pseudo-R-squared, all of which have corresponding components to the summary output from `lm()`. We also see a table of spatial covariance parameter estimates.
+:::
+
+## The Spatial Linear Model
+
+$$ 
+\mathbf{y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\tau} + \boldsymbol{\epsilon},
+$$ {#eq-splm}
+
+-   $\text{Cov}(\boldsymbol{\tau}) = \sigma^2_{de} \mathbf{R}$
+-   $\text{Cov}(\mathbf{y}) \equiv \boldsymbol{\Sigma} = \sigma^2_{de} \mathbf{R} + \sigma^2_{ie} \mathbf{I}$
+- Exponential Correlation: $\mathbf{R} = \exp(-\mathbf{H} / \phi)$
+
+::: {.notes}
+Going back to the equation for the spatial linear model, the `de` value in the summary output is an estimate for sigma squared de, which is sometimes called the partial sill, the `ie` value in the summary output is an estimate for sigma squared ie, which is sometimes called the nugget, and the `range` value in the summary output is an estimate for phi, which controls how quickly the spatial correlation decays with distance.
+:::
+
+## Your Turn
+
+::: task
+Another data set contained within the `spmodel` package is the `caribou` data set. Fit a spatial linear model with
+
+-   `z` as the response and `tarp`, `water`, and the interaction between `tarp` and `water` as predictors
+-   a spatial covariance model for the errors of your choosing
+-   `x` as the `xcoord` and `y` as the `ycoord`
+
+After fitting the model, perform an analysis of variance using `anova()` to assess the importance of `tarp`, `water`, and `tarp:water`.
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 7)
+```
+
+::: {.notes}
+For this exercise, you'll fit a spatial linear model to this `caribou` data set, which is also in the `spmodel` package. In the workbook, there's a few other pieces of information that might help you along, including a short description of the `xcoord` and `ycoord` arguments, which will need to be used since `caribou` is a `data.frame`, not an `sf`, object.
+:::
+
+## Your Turn
+
+::: task
+Compare your anova model output to the anova model output of your neighbor(s). Are the inferences made on the fixed effects very different for your two choices of spatial covariance model?
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 3)
+```
+
+## Model Fit
+
+The `glance()` function returns columns with the sample size (`n`), number of fixed effects (`p`), number of estimated covariance parameters (`npar`), optimization criteria minimum (`value`), AIC (`AIC)`, AICc (`AICc`), log-likelihood (`loglik`), deviance (`deviance`), and pseudo R-squared (`pseudo.r.squared`)
+
+```{r}
+glance(spmod)
+```
+
+::: {.notes}
+Examining some model fit statistics can most easily be done with the `glance()` function, which returns a row with a bunch of different model fit statistics. Many of these statistics can also be obtained individually with a particular function. For example, there is an AIC function to obtain AIC, there is a log likelihood function to obtain the log likelihood, and there is a pseudo R squared function to obtain the pseudo R squared.
+:::
+
+## Your Turn
+
+::: task
+The `glances()` function allows us to compare the model fit statistics for a few different models simultaneously. Use `splm()` to fit a model with a Matérn spatial covariance (by specifying `"matern"` for `spcov_type`) and a model with no spatial covariance (by specifying `"none"` for `spcov_type`). Then, use the `glances()` function, providing each model object as an argument, to compare the model fit statistics of each model.
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 5)
+```
+
+::: {.notes}
+This exercise will have you explore the glances function to compare model fits for a few different models.
+:::
+
+## Model Diagnostics
+
+The `augment()` function returns columns with
+
+-   `.fitted`, the fitted value, calculated from the estimated fixed effects in the model
+-   `.hat`, the Mahalanobis distance, a metric of leverage
+-   `.cooksd`, the Cook's distance, a metric of influence
+-   `.std.resid`, the standardized residual
+
+```{r}
+#| results: false
+augment(spmod)
+```
+
+::: {.notes}
+The `augment()` function is also part of the `broom` package, and gives a lot of the common model diagnostic statistics, including fitted values, hat values, cook's distances, and standardized residuals. The tibble that is output can be quite convenient to plot with, especially if you are using the `ggplot2` package to plot. In the outputted tibble, the geometry remains in tact, which again, is often helpful for plotting or for further analysis. In the workbook, there is an example of using ggplot to construct a plot of cook's distance from the augmented data frame.
+:::
+
+## Your Turn
+
+::: task
+Use `spmodel`'s plot function on the spmod object to construct a plot of the fitted spatial covariance vs spatial distance. To learn more about the options for `spmodel`'s plot function, run `?plot.spmodel` or visit [this link](https://usepa.github.io/spmodel/reference/plot.spmodel.html).
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 3)
+```
+
+::: {.notes}
+But, if you want something a bit quicker, the plot generic in spmodel can also be used to construct plots with base `R` graphics. This exercise, along with the following exercise, prompts you to explore one of those plots.
+:::
+
+## Your Turn
+
+::: task
+Use `spmodel`'s plot function on the `spmod` object to construct any of the other 6 types of plots possible for this type of model. Then, explain what the plot is showing to your neighbor(s).
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 5)
+```
+
+# Prediction
+
+## Goals
+
+::: goals
+1.  Predict the response value at an unobserved location for point-referenced data.
+2.  Calculate leave-one-out cross-validation residuals.
+:::
+
+::: {.notes}
+While one common goal of spatial analysis is to make inferences on fixed effects, another common goal is to make predictions for the response variable at unobserved spatial locations. Formally, this prediction of the response variable at unobserved spatial locations for point-referenced data is known as kriging.
+:::
+
+## The Moose Data
+
+The `moose` data contains moose counts and moose presence for 218 spatial locations in Alaska.
+
+```{r}
+#| label: fig-moose
+#| fig-cap: "Distribution of moose data."
+#| output-location: slide
+
+ggplot(data = moose, aes(colour = count)) +
+  geom_sf(size = 2) +
+  scale_colour_viridis_c(limits = c(0, 40)) +
+  theme_minimal(base_size = 18)
+```
+
+::: {.notes}
+To show how to make predictions for unobserved spatial locations with `spmodel`, we will use the `moose` data set, which is also in the `spmodel` package. 
+
+Following slide: The moose data contains the results from a survey from a region in Alaska, where each row corresponds to a spatial location in the survey. The response is the moose `count`, and, we can see from the map, that most of the locations in the data set have a low number of observed moose, but, there is one location in particular in the southwest where over 40 moose were observed.
+:::
+
+## The Moose Prediction Data
+
+The `moose_preds` data contains spatial locations that were not surveyed.
+
+```{r}
+#| echo: false
+moose_preds |> 
+  dplyr::slice(1:3) |>
+  knitr::kable()
+```
+
+::: {.notes}
+The `moose_preds` data, also in the `spmodel` package, contains spatial locations in the region of interest for which we are interested in predicting the moose `count`. We can see in this table that there is no variable for moose `count` (as those are missing) but we do have a couple of predictor variables that we will end up using as fixed effects in the model: `elev`, the elevation of the spatial location and `strat`, a pre-survey stratification variable that is either `"L"` for low or `"M"` for medium.
+:::
+
+## Fit a Spatial Linear Model
+
+```{r}
+moosemod <- splm(count ~ elev * strat, data = moose,
+                  spcov_type = "spherical")
+tidy(moosemod)
+```
+
+::: {.notes}
+Before we make any predictions in `moose_preds`, we first fit a spatial linear model with the same syntax that we have been using for the past hour or two. And here, we use the `tidy()` function to examine some of the fixed effect estimates.
+:::
+
+## Predictions
+
+Using `predict()`
+
+```{r}
+#| results: false
+predict(moosemod, newdata = moose_preds)
+```
+
+Using `augment()`
+
+```{r}
+#| output-location: slide
+moose_aug <- augment(moosemod, newdata = moose_preds)
+moose_aug
+```
+
+::: {.notes}
+To make predictions at the unobserved spatial locations in the `moose_preds` data, we can either use `predict()` or `augment()`. The syntax for both functions is quite similar in that both require the name of the fitted model object as well as the `newdata` argument that has a data.frame with observations for which we would like to make predictions for.
+
+The two functions are quite different, however, in what they will return as output. Predict returns a vector of predictions for the unobserved locations, while augment returns a tibble, or data frame, with the predictor values, the spatial geometry, and the predictions.
+
+Following slide: We can also note here that some of the predictions are negative, even though the response variable is a count (so should be greater than or equal to 0). These unreasonable predictions set us up for fitting a spatial generalized linear model later, in which we will use the Poisson distribution to model the counts instead.
+:::
+
+## Your Turn
+
+::: task
+Examine the help file `?augment.spmodel` or by visiting [this link](https://usepa.github.io/spmodel/reference/augment.spmodel.html) and create site-wise 99% prediction intervals for the unsampled locations found in `moose_preds`.
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 5)
+```
+
+::: {.notes}
+In the exercise, you'll explore a couple of additional arguments to `augment()` that can be used to get site-wise prediction intervals. Again, we can note that some of the lower bounds are negative, because we are using the unconstrained normal distribution as the model for the response when we use the `splm()` function.
+:::
+
+## Cross Validation
+
+The `loocv()` function can be used to perform leave-one-out cross validation on a fitted model object using mean-squared-prediction error (MSPE) loss:
+
+```{r}
+loocv(moosemod)
+```
+
+::: {.notes}
+Leave-one-out cross-validation can also be used to examine model fit, in addition to or as opposed to, the model fit metrics like AIC returned with the glance function. Conceptually, for leave-one-out cross-validation, an observation in the data set is removed, the model is fit without this observation, and a prediction is made for the response value for the missing observation. The prediction is compared to the actual observed response and the process is then repeated for every observation in the data set. 
+
+The spmodel package then computes the mean-squared-prediction-error: a lower mean squared prediction error indicates a better model fit.
+:::
+
+## Your Turn
+
+::: task
+Fit a model with `count` as the response variable from the `moose` data with a `"spherical"` spatial covariance model for the random errors but no predictors as fixed effects. Compare the MSPE from leave-one-out cross-validation for this model with the previously fit `moosemod`. Which model is better, according to the leave-one-out cross-validation criterion?
+
+Then, for the model with the lower MSPE, obtain the leave-one-out cross validation predictions and their standard errors. Hint: run `?loocv` or visit [this link](https://usepa.github.io/spmodel/reference/loocv.html).
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 7)
+```
+
+::: {.notes}
+For this exercise, we'll compare the mean squared prediction error for a couple of different models. After, we'll look at a couple of additional arguments to loocv.
+:::
+
+# Additional Modeling Features
+
+## Goals
+
+::: goals
+Incorporate additional arguments to `splm()` to:
+
+*  Fit and predict for multiple models simultaneously.
+*  Fit a spatial linear model with non-spatial random effects.
+*  Fit a spatial linear model with anisotropy.
+*  Fit a spatial linear model with a partition factor.
+*  Fix certain spatial covariance parameters at known values.
+:::
+
+## Multiple Models
+
+Provide a vector of `spcov_type`s:
+
+```{r}
+spmods <- splm(formula = log_Zn ~ log_dist2road, data = moss,
+              spcov_type = c("exponential", "gaussian"))
+names(spmods)
+```
+
+Natural to combine with `glances()` and `predict()`:
+
+```{r}
+glances(spmods)
+```
+
+## Your Turn
+
+::: task
+Work with a neighbor to find 90% confidence intervals for the fixed effects in the Gaussian model with one of two functions: (1) `tidy()` or (2) `confint()`. Before beginning, decide with your neighbor who will work finding the intervals with (1) `tidy()` and who will work on finding the intervals with (2) `confint()`.
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 5)
+```
+
+## Non-Spatial Random Effects
+
+```{r}
+#| echo: false
+moss |> 
+  dplyr::slice(1:4) |> 
+  dplyr::select(sample, log_dist2road, log_Zn) |>
+  knitr::kable(digits = 2)
+```
+
+## The `random` Argument
+
+In `splm()`, the `random` argument follows similar syntax to how random effects are specified in the `nlme` and `lme4` packages.
+
+-   `random = ~ group` and `random = (1 | group)` specify random intercepts for each level of `group`.
+-   `random = (x | group)` specifies random intercepts for group and for each level of `group` to have a different slope for `x`.
+
+## Non-Spatial Random Effects
+
+```{r}
+randint <- splm(log_Zn ~ log_dist2road,
+                data = moss, spcov_type = "exponential",
+                random = ~ (1 | sample))
+```
+
+## Non-Spatial Random Effects
+
+```{r}
+summary(randint)
+```
+
+## More Complex Random Effects Models
+
+```{r}
+yearint <- splm(log_Zn ~ log_dist2road,
+                      data = moss, spcov_type = "exponential",
+                      random = ~ (1 | sample + year))
+yearsl <- splm(log_Zn ~ log_dist2road,
+                      data = moss, spcov_type = "exponential",
+                      random = ~ (1 | sample) + 
+                       (log_dist2road | year))
+```
+
+## Your Turn
+
+::: task
+Perhaps a model with random intercepts for `sample` and random intercepts and slopes for `year` but without any spatial covariance is an even better fit to the data. Fit such a model by specifying `spcov_type` to be `"none"`. Then, use `glances()` to see how well this non-spatial model fits the `moss` data compared to the spatially explicit models.
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 5)
+```
+
+## Anisotropy
+
+An anisotropic covariance does not behave similarly in all directions
+
+-   Consider a spatial covariance influenced by the prevailing wind direction.
+
+```{r}
+aniso <- splm(log_Zn ~ log_dist2road,
+              data = moss, spcov_type = "exponential",
+              anisotropy = TRUE)
+glances(spmod, aniso)
+```
+
+## Anisotropy
+
+```{r}
+summary(aniso)
+```
+
+## Your Turn
+
+::: task
+Visualize the anisotropic level curve for `spmod` using `plot()`. Hint: Run `?plot.spmodel` or visit [this link](https://usepa.github.io/spmodel/reference/plot.spmodel.html). 
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 3)
+```
+
+## Your Turn
+
+::: task
+Examine the `anisotropy` section of `Details` in the `splm()` help file with `?splm`. Then, with your neighbor, discuss which direction the model predicts two responses will be more correlated?
+
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 5)
+```
+
+
+## Partition Factors
+
+A factor variable (i.e., categorical) is a partition factor when two observations in separate levels of the partition factor should be uncorrelated
+
+-   Observations from the same year are spatially correlated but observations from different years are not:
+
+```{r}
+part <- splm(log_Zn ~ log_dist2road,
+             data = moss, spcov_type = "exponential",
+             partition_factor = ~ year)
+```
+
+## Fixing Covariance Parameters
+
+Steps:
+
+1.  Use `spcov_initial()` to specify the covariance type and any known, fixed covariance parameters.
+
+2.  Instead of specifying the `spcov_type` argument in `splm()`, specify the `spcov_initial` argument with the object from (1).
+
+```{r}
+#| output-location: slide
+init_spher <- spcov_initial("spherical", range = 20000, known = "range")
+splm(log_Zn ~ log_dist2road, data = moss,
+     spcov_initial = init_spher)
+```
+
+## Your Turn
+
+::: task
+Fit a `"spherical"` spatial covariance model to the `moss` data set without a nugget effect (i.e., the model should have the `ie` independent variance parameter set to `0` and treated as `known`). Verify in the summary output that the `ie` is indeed `0` for this model.
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 5)
+```
+
+## Your Turn
+
+::: task
+With a neighbor, compare the fit of the `"spherical"` model with the `ie` variance parameter known and fixed at 0 (the no nugget model from the previous exercise) with the fit of a `"spherical"` model where all spatial covariance parameters are unknown and are estimated using (1) the `AIC` metric and (2) the `MSPE` from leave-one-out cross-validation using the `loocv()` function.
+
+Before beginning work, decide who will complete (1) `AIC` and who will complete (2) `loocv()`.
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 5)
+```
+
+## Random Forest Spatial Residual Models
+
+See workbook for an example of prediction using random forest spatial residual models
+
+# Large Data Sets
+
+## Goals
+
+::: goals
+1.  Use the `local` argument in `splm()` to fit a spatial linear model to a large data set.
+2.  Use the `local` argument in `predict()` (or `augment()`) to make predictions for a large data set.
+:::
+
+## Large Data Challenges
+
+-   Inversion of $\boldsymbol{\Sigma}$ for data sets with around 10,000 or more observations is challenging (and often infeasible) on a standard computer
+-   `spmodel` implements "local" spatial indexing [@hoef2023indexing] for model fitting
+    -   Induce some sparsity in the covariance matrix
+    -   Set `local = TRUE` in `splm()`
+-   See workbook for example
+    -   5,000 observations fit in 12 seconds (no parallel)
+
+## Large Data Challenges
+
+-   `spmodel` uses "local neighborhood prediction" to predict for unobserved spatial locations for a model fit to a large data set
+    -   Only a subset of observations are used to predict the response at a particular location
+    -   Set `local = TRUE` in `predict()` or `augment()`
+-   See workbook for example
+    -   3,000 predictions in 11.7 seconds (no parallel)
+
+# Generalized Linear Models
+
+## Goals
+
+::: goals
+1.  Explain how modeling spatial covariance fits within the structure of a generalized linear model.
+2.  Use the `spglm()` function in `spmodel` to fit generalized linear models for various model families (i.e., response distributions).
+:::
+
+## The Spatial Generalized Linear Model
+
+$$
+g(\boldsymbol{\mu}) = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\tau} + \boldsymbol{\epsilon},
+$$
+
+-   $g(\boldsymbol{\mu})$ is the link function that "links" a function of the mean of $\mathbf{y}$ to $\mathbf{X} \boldsymbol{\beta}$, $\boldsymbol{\tau}$, and $\boldsymbol{\epsilon}$
+-   Fit models using a novel application of the the Laplace approximation [@hoef2023marginal]
+
+## Response Distributions
+
+| Distribution      | Data Type  | Link Function |
+|-------------------|------------|---------------|
+| Poisson           | Count      | Log           |
+| Negative Binomial | Count      | Log           |
+| Binomial          | Binary     | Logit         |
+| Beta              | Proportion | Logit         |
+| Gamma             | Skewed     | Log           |
+| Inverse Gaussian  | Skewed     | Log           |
+
+: Response distributions and link functions available in `spmodel`
+
+## The Moose Data
+
+```{r}
+#| echo: false
+
+moose |> 
+  dplyr::slice(1:3) |>
+  knitr::kable(digits = 1)
+```
+
+## Model Fitting
+
+```{r}
+poismod <- spglm(count ~ elev * strat, data = moose,
+                 family = poisson, spcov_type = "spherical")
+```
+
+* The `family` argument can be `binomial`, `beta`, `poisson`, `nbinomial`, `Gamma`, or `inverse.gaussian`
+
+* Notice the similarities between `spglm()` and `glm()`
+
+## Model Fitting
+
+```{r}
+summary(poismod)
+```
+
+## Your Turn
+
+::: task
+Fit a spatial negative binomial model to the `moose` data with `count` as the response and `elev`, `strat`, and their interaction as predictors. The negative binomial model relaxes the assumption in the spatial Poisson generalized linear model that the mean of a response variable $Y_i$ and the variance of a response variable $Y_i$ must be equal. Obtain a summary of the fitted model. Then compare their fits using `loocv()`. Which model is preferable?
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 5)
+```
+
+## Prediction
+
+Using `predict()`
+
+```{r}
+#| results: false
+
+predict(poismod, newdata = moose_preds)
+```
+
+Using `augment()`
+
+```{r}
+#| output-location: slide
+
+augment(poismod, newdata = moose_preds)
+```
+
+## Additional Modeling Features
+
+All advanced features available in `spmodel` for spatial linear models (`splm()`) are also available for spatial generalized linear models (`spglm()`)
+
+* Fit and predict for multiple models
+* Non-spatial random effects
+* Anisotropy
+* Etc.
+
+## Your Turn
+
+::: task
+Use `spglm()` to fit a spatial logistic regression model to the `moose` data using `presence` as the response variable and a `"cauchy"` covariance function. Then, find the predicted probabilities that moose are present at the spatial locations in `moose_preds` (Hint: Use the `type` argument in `predict()` or `augment()`).
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 7)
+```
+
+# Simulating Data
+
+## Goals
+
+::: goals
+
+1.  Simulate spatial Gaussian data using `sprnorm()`.
+
+2.  Simulate spatial binary, proportion, count, and skewed data using `sprbinom()`, `sprbeta()`, `sprpois()`, `sprnbinom()`, `sprgamma()`, and `sprinvgauss()`.
+
+:::
+
+## Simulating Gaussian Data
+
+1.  Use `spcov_params()` to specify the correlation structure and covariance parameters
+
+```{r}
+params <- spcov_params("exponential", de = 1, ie = 0.5, range = 5e5)
+```
+
+2.  Use `sprnorm(params, data)` to simulate a realization of the spatial process defined by `spcov_params()` at locations in `data`.
+
+```{r}
+set.seed(1)
+sulfate$z <- sprnorm(params, data = sulfate)
+```
+
+## Simulating Gaussian Data
+
+3.  Visualize
+
+```{r}
+#| label: fig-sulfate-sim
+#| fig-cap: "Distribution of simulated Gaussian data."
+#| output-location: slide
+
+ggplot(sulfate, aes(color = z)) +
+  geom_sf(size = 2) +
+  scale_color_viridis_c() +
+  theme_gray(base_size = 14)
+```
+
+## The Empirical Semivariogram
+
+What does an empirical semivariogram of the simulated data look like?
+
+```{r}
+#| label: fig-sulfate-sim-esv
+#| fig-cap: "Empirical semivariogram of simulated Gaussian data."
+#| output-location: slide
+
+esv_out <- esv(z ~ 1, sulfate)
+ggplot(esv_out, aes(x = dist, y = gamma, size = np)) +
+  geom_point() +
+  lims(y = c(0, NA)) +
+  theme_gray(base_size = 14)
+```
+
+## Simulating Other Data
+
+Use `sprpois(params, data)` to simulate a Poisson realization and visualize
+
+```{r}
+#| label: fig-sulfate-sim2
+#| fig-cap: "Distribution of simulated Poisson data."
+#| output-location: slide
+
+sulfate$p <- sprpois(params, data = sulfate)
+ggplot(sulfate, aes(color = p)) +
+  geom_sf(size = 2) +
+  scale_color_viridis_c() +
+  theme_gray(base_size = 14)
+```
+
+## A Caution
+
+* Simulating spatial data in `spmodel` requires the Cholesky decomposition of the covariance matrix, which can take awhile for sample sizes exceeding 10,000
+* Regardless of the number of realizations simulated, this Cholesky decompsition is only needed once
+* This means that simulating many realizations (via `samples`) takes nearly the same time as simulating just one.
+
+# Areal Data
+
+## Goals
+
+::: goals
+
+1.  Use the `spautor()` function in `spmodel` to fit a spatial linear model to areal data.
+
+2.  Apply functions used for point-referenced data fit with `splm()` to areal data fit with `spautor()`.
+
+:::
+
+## The Seal Data
+
+```{r}
+#| label: fig-seal
+#| fig-cap: "Distribution of the seal data."
+
+ggplot(seal, aes(fill = log_trend)) +
+  geom_sf() +
+  scale_fill_viridis_c() +
+  theme_bw(base_size = 18) 
+```
+
+## Model Syntax
+
+Model syntax for `spautor()` (`spgautor()`) is similar to the syntax used for `splm()` (`spglm()`):
+
+```{r}
+sealmod <- spautor(log_trend ~ 1, data = seal, spcov_type = "car")
+```
+
+## Model Output Interpretation
+
+```{r}
+summary(sealmod)
+```
+
+## Your Turn
+
+::: task
+Choose a couple of helper functions that you would like to explore and apply those functions to the fitted seal model.
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 3)
+```
+
+## Your Turn
+
+::: task
+Interpret your findings from the previous exercise with your neighbor(s), explaining which functions you selected to use and what the associated output means.
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 5)
+```
+
+## Prediction
+
+Predictions must occur for "missing" (`NA`) responses in the observed data
+
+Using `predict()`
+
+```{r}
+#| results: false
+predict(sealmod)
+```
+
+Using `augment()`
+
+```{r}
+#| output-location: slide
+augment(sealmod, newdata = sealmod$newdata)
+```
+
+## Your Turn
+
+::: task
+Verify that the fitted autoregressive model with the `seal` data changes when the polygons with missing response values are excluded from the `data` argument in `spautor()`. The following code creates a data without the polygons with missing values:
+
+```{r}
+is_missing <- is.na(seal$log_trend)
+seal_nomiss <- seal[!is_missing, , ]
+```
+:::
+
+```{r}
+#| echo: false
+
+countdown(minutes = 5)
+```
+
+# Thank You!
+
+## Thank You!
+
+-   Thank you so much for attending
+-   Please reach out with comments / questions / suggestions / bugs (Dumelle.Michael\@epa.gov)
+-   A6.02 16:00 - 16:15 Thursday, 20 July, 2023 UMC Glenn Miller Ballroom Middle
+    - Slides available at INSERT LINK HERE
+
+---
+nocite: |
+  @dumelle2023spmodel
+---
+
+# References
+
+::: {#refs}
+:::

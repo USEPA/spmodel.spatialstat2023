@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>spmodel Workshop - 5&nbsp; Additional Modeling Features</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./large-data-sets.html" rel="next">
+<link href="./prediction.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+</head>
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./additional-features.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Additional Modeling Features</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">spmodel Workshop</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Basics</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./spatial-linear-model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">The Spatial Linear Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model-fitting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Model Fitting</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./prediction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Prediction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./additional-features.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Additional Modeling Features</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./large-data-sets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Large Data Sets</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./generalized.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Generalized Linear Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./simulate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Simulating Data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./areal-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Areal Data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#multiple-models" id="toc-multiple-models" class="nav-link active" data-scroll-target="#multiple-models"><span class="header-section-number">5.1</span> Multiple Models</a></li>
+  <li><a href="#non-spatial-random-effects" id="toc-non-spatial-random-effects" class="nav-link" data-scroll-target="#non-spatial-random-effects"><span class="header-section-number">5.2</span> Non-Spatial Random Effects</a></li>
+  <li><a href="#anisotropy" id="toc-anisotropy" class="nav-link" data-scroll-target="#anisotropy"><span class="header-section-number">5.3</span> Anisotropy</a></li>
+  <li><a href="#partition-factors" id="toc-partition-factors" class="nav-link" data-scroll-target="#partition-factors"><span class="header-section-number">5.4</span> Partition Factors</a></li>
+  <li><a href="#fixing-covariance-parameters" id="toc-fixing-covariance-parameters" class="nav-link" data-scroll-target="#fixing-covariance-parameters"><span class="header-section-number">5.5</span> Fixing Covariance Parameters</a></li>
+  <li><a href="#random-forest-spatial-residual-models" id="toc-random-forest-spatial-residual-models" class="nav-link" data-scroll-target="#random-forest-spatial-residual-models"><span class="header-section-number">5.6</span> Random Forest Spatial Residual Models</a></li>
+  <li><a href="#r-code-appendix" id="toc-r-code-appendix" class="nav-link" data-scroll-target="#r-code-appendix"><span class="header-section-number">5.7</span> R Code Appendix</a></li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title"><span id="sec-features" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Additional Modeling Features</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header><p>Throughout this section, we will use both the <code>spmodel</code> package and the <code>ggplot2</code> package:</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://usepa.github.io/spmodel/">spmodel</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We will continue to use the <code>moss</code> data throughout this section.</p>
+<p><strong>Goals</strong>:</p>
+<ul>
+<li>Incorporate additional arguments to <code><a href="https://usepa.github.io/spmodel/reference/splm.html">splm()</a></code> to:
+<ul>
+<li>Fit and predict for multiple models simultaneously.</li>
+<li>Fit a spatial linear model with non-spatial random effects.</li>
+<li>Fit a spatial linear model with anisotropy.</li>
+<li>Fit a spatial linear model with a partition factor.</li>
+<li>Fix certain spatial covariance parameters at known values.</li>
+<li>Fit a random forest spatial residual linear model and make predictions.</li>
+</ul>
+</li>
+</ul>
+<section id="multiple-models" class="level2" data-number="5.1"><h2 data-number="5.1" class="anchored" data-anchor-id="multiple-models">
+<span class="header-section-number">5.1</span> Multiple Models</h2>
+<p><code><a href="https://usepa.github.io/spmodel/reference/splm.html">splm()</a></code> fits multiple models simultaneously when <code>spcov_type</code> is a vector with more than one element:</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">spmods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>, data <span class="op">=</span> <span class="va">moss</span>,</span>
+<span>              spcov_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"exponential"</span>, <span class="st">"gaussian"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>spmods</code> is a list with two elements: <code>exponential</code>, using the exponential spatial covariance; and <code>gaussian</code>, using the Gaussian spatial covariance.</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">spmods</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "exponential" "gaussian"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>spmods</code> is natural to combine with <code><a href="https://usepa.github.io/spmodel/reference/glances.html">glances()</a></code> to glance at each model fit:</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://usepa.github.io/spmodel/reference/glances.html">glances</a></span><span class="op">(</span><span class="va">spmods</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 10</span></span>
+<span><span class="co">#&gt;   model      n     p  npar value   AIC  AICc logLik deviance pseudo.r.squared</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;            &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 expon…   365     2     3  367.  373.  373.  -184.     363             0.683</span></span>
+<span><span class="co">#&gt; 2 gauss…   365     2     3  435.  441.  441.  -218.     363.            0.686</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>and to combine with <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> to predict for each model fit.</p>
+<div class="callout callout-style-default callout-important no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Work with a neighbor to find 90% confidence intervals for the fixed effects in the Gaussian model using either (1) <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> or (2) <code><a href="https://rdrr.io/r/stats/confint.html">confint()</a></code>. Before beginning, decide with your neighbor who will begin working on (1) <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> and who will begin working on (2) <code><a href="https://rdrr.io/r/stats/confint.html">confint()</a></code>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">spmods</span><span class="op">$</span><span class="va">gaussian</span>, conf.int <span class="op">=</span> <span class="cn">TRUE</span>, conf.level <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 7</span></span>
+<span><span class="co">#&gt;   term          estimate std.error statistic p.value conf.low conf.high</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 (Intercept)      9.21     0.196       46.9       0    8.89      9.53 </span></span>
+<span><span class="co">#&gt; 2 log_dist2road   -0.519    0.0184     -28.2       0   -0.549    -0.489</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html">confint</a></span><span class="op">(</span><span class="va">spmods</span><span class="op">$</span><span class="va">gaussian</span>, level <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                      5 %       95 %</span></span>
+<span><span class="co">#&gt; (Intercept)    8.8853387  9.5310288</span></span>
+<span><span class="co">#&gt; log_dist2road -0.5493091 -0.4887111</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="non-spatial-random-effects" class="level2" data-number="5.2"><h2 data-number="5.2" class="anchored" data-anchor-id="non-spatial-random-effects">
+<span class="header-section-number">5.2</span> Non-Spatial Random Effects</h2>
+<p>In the <code>moss</code> data, there are actually some spatial locations that have more than one measurement due to multiple samples being collected at a single location or due to a single sample being tested multiple times in the laboratory. The <code>sample</code> variable indexes the spatial location:</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">moss</span></span>
+<span><span class="co">#&gt; Simple feature collection with 365 features and 7 fields</span></span>
+<span><span class="co">#&gt; Geometry type: POINT</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: -445884.1 ymin: 1929616 xmax: -383656.8 ymax: 2061414</span></span>
+<span><span class="co">#&gt; Projected CRS: NAD83 / Alaska Albers</span></span>
+<span><span class="co">#&gt; # A tibble: 365 × 8</span></span>
+<span><span class="co">#&gt;   sample field_dup lab_rep year  sideroad log_dist2road log_Zn</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;  &lt;fct&gt;     &lt;fct&gt;   &lt;fct&gt; &lt;fct&gt;            &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 001PR  1         1       2001  N                 2.68   7.33</span></span>
+<span><span class="co">#&gt; 2 001PR  1         2       2001  N                 2.68   7.38</span></span>
+<span><span class="co">#&gt; 3 002PR  1         1       2001  N                 2.54   7.58</span></span>
+<span><span class="co">#&gt; 4 003PR  1         1       2001  N                 2.97   7.63</span></span>
+<span><span class="co">#&gt; 5 004PR  1         1       2001  N                 2.72   7.26</span></span>
+<span><span class="co">#&gt; 6 005PR  1         1       2001  N                 2.76   7.65</span></span>
+<span><span class="co">#&gt; # ℹ 359 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: geometry &lt;POINT [m]&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We might expect Zinc concentration to be correlated within a spatial location; therefore, we might want to add <code>sample</code> as a non-spatial random effect (here, an intercept random effect) to the model with <code>log_Zn</code> as the response and <code>log_dist2road</code> as the predictor. The <code><a href="https://usepa.github.io/spmodel/reference/splm.html">splm()</a></code> function allows non-spatial random effects to be incorporated with the <code>random</code> argument, which takes a formula specification that is similar in syntax as the <code>nlme</code> <span class="citation" data-cites="pinheiro2006mixed">(<a href="references.html#ref-pinheiro2006mixed" role="doc-biblioref">Pinheiro and Bates 2006</a>)</span> and <code>lme4</code> <span class="citation" data-cites="bates2015lme4">(<a href="references.html#ref-bates2015lme4" role="doc-biblioref">Bates et al. 2015</a>)</span> packages.</p>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">randint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>,</span>
+<span>                data <span class="op">=</span> <span class="va">moss</span>, spcov_type <span class="op">=</span> <span class="st">"exponential"</span>,</span>
+<span>                random <span class="op">=</span> <span class="op">~</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">sample</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For the <code>randint</code> model, in the <code>random</code> argument, <code>sample</code> is shorthand for <code>(1 | sample)</code>. So the <code>randint</code> model could be written more concisely as</p>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">randint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>,</span>
+<span>                      data <span class="op">=</span> <span class="va">moss</span>, spcov_type <span class="op">=</span> <span class="st">"exponential"</span>,</span>
+<span>                      random <span class="op">=</span> <span class="op">~</span> <span class="va">sample</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<p>The summary output now shows an estimate of the variance of the random intercepts, in addition to the estimated fixed effects and estimated spatial covariance parameters.</p>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">randint</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; splm(formula = log_Zn ~ log_dist2road, data = moss, spcov_type = "exponential", </span></span>
+<span><span class="co">#&gt;     random = ~sample)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Residuals:</span></span>
+<span><span class="co">#&gt;     Min      1Q  Median      3Q     Max </span></span>
+<span><span class="co">#&gt; -2.6234 -1.3228 -0.8026 -0.2642  1.0998 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients (fixed):</span></span>
+<span><span class="co">#&gt;               Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; (Intercept)    9.66066    0.26770   36.09   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; log_dist2road -0.55028    0.02071  -26.58   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Pseudo R-squared: 0.6605</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients (exponential spatial covariance):</span></span>
+<span><span class="co">#&gt;        de        ie     range </span></span>
+<span><span class="co">#&gt; 3.153e-01 2.094e-02 1.083e+04 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients (random effects):</span></span>
+<span><span class="co">#&gt; 1 | sample </span></span>
+<span><span class="co">#&gt;    0.07995</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And, <code><a href="https://usepa.github.io/spmodel/reference/glances.html">glances()</a></code> shows that the model with the random intercepts is a better fit to the data than the model without random intercepts.</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">spmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>,</span>
+<span>              data <span class="op">=</span> <span class="va">moss</span>, spcov_type <span class="op">=</span> <span class="st">"exponential"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://usepa.github.io/spmodel/reference/glances.html">glances</a></span><span class="op">(</span><span class="va">spmod</span>, <span class="va">randint</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 10</span></span>
+<span><span class="co">#&gt;   model      n     p  npar value   AIC  AICc logLik deviance pseudo.r.squared</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;            &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 randi…   365     2     4  335.  343.  343.  -168.     363.            0.661</span></span>
+<span><span class="co">#&gt; 2 spmod    365     2     3  367.  373.  373.  -184.     363             0.683</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As another example, we might consider a model that also has random intercepts for <code>year</code>, or, a model that also has both random intercepts for <code>year</code> and random slopes for <code>log_dist2road</code> within <code>year</code>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">yearint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>,</span>
+<span>                      data <span class="op">=</span> <span class="va">moss</span>, spcov_type <span class="op">=</span> <span class="st">"exponential"</span>,</span>
+<span>                      random <span class="op">=</span> <span class="op">~</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">sample</span> <span class="op">+</span> <span class="va">year</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">yearsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>,</span>
+<span>                      data <span class="op">=</span> <span class="va">moss</span>, spcov_type <span class="op">=</span> <span class="st">"exponential"</span>,</span>
+<span>                      random <span class="op">=</span> <span class="op">~</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">sample</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>                       <span class="op">(</span><span class="va">log_dist2road</span> <span class="op">|</span> <span class="va">year</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code><a href="https://usepa.github.io/spmodel/reference/glances.html">glances()</a></code> shows that, of these four models, the model that includes random intercepts for <code>sample</code>, random intercepts for <code>year</code>, and random slopes for <code>year</code> is best, according to the AIC and AICc metrics.</p>
+<div class="cell">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://usepa.github.io/spmodel/reference/glances.html">glances</a></span><span class="op">(</span><span class="va">spmod</span>, <span class="va">randint</span>, <span class="va">yearint</span>, <span class="va">yearsl</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 10</span></span>
+<span><span class="co">#&gt;   model      n     p  npar value   AIC  AICc logLik deviance pseudo.r.squared</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;            &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 yearsl   365     2     6  190.  202.  202.  -94.9     363.            0.215</span></span>
+<span><span class="co">#&gt; 2 yeari…   365     2     4  230.  238.  238. -115.      363.            0.729</span></span>
+<span><span class="co">#&gt; 3 randi…   365     2     4  335.  343.  343. -168.      363.            0.661</span></span>
+<span><span class="co">#&gt; 4 spmod    365     2     3  367.  373.  373. -184.      363             0.683</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The syntax <code>~ (log_dist2road | year)</code> specifies that both random intercepts for <code>year</code> and random slopes for <code>log_dist2road</code> within <code>year</code> should be included in the model. If only random slopes are desired, then we should set <code>random</code> to <code>~ (-1 + log_dist2road | year)</code>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Perhaps a model with random intercepts for <code>sample</code> and random intercepts and slopes for <code>year</code> but without any spatial covariance is an even better fit to the data. Fit such a model by specifying <code>spcov_type</code> to be <code>"none"</code>. Then, use <code><a href="https://usepa.github.io/spmodel/reference/glances.html">glances()</a></code> to see how well this non-spatial model fits the <code>moss</code> data compared to the spatially explicit models.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nospcov</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>,</span>
+<span>                    data <span class="op">=</span> <span class="va">moss</span>, spcov_type <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>                    random <span class="op">=</span> <span class="op">~</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">sample</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>                      <span class="op">(</span><span class="va">log_dist2road</span> <span class="op">|</span> <span class="va">year</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://usepa.github.io/spmodel/reference/glances.html">glances</a></span><span class="op">(</span><span class="va">spmod</span>, <span class="va">randint</span>, <span class="va">yearint</span>, <span class="va">yearsl</span>, <span class="va">nospcov</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 10</span></span>
+<span><span class="co">#&gt;   model      n     p  npar value   AIC  AICc logLik deviance pseudo.r.squared</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;            &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 yearsl   365     2     6  190.  202.  202.  -94.9     363.            0.215</span></span>
+<span><span class="co">#&gt; 2 yeari…   365     2     4  230.  238.  238. -115.      363.            0.729</span></span>
+<span><span class="co">#&gt; 3 randi…   365     2     4  335.  343.  343. -168.      363.            0.661</span></span>
+<span><span class="co">#&gt; 4 spmod    365     2     3  367.  373.  373. -184.      363             0.683</span></span>
+<span><span class="co">#&gt; 5 nospc…   365     2     4  456.  464.  464. -228.      363             0.119</span></span>
+<span><span class="co">## the model with no explicit spatial covariance has the worst fit </span></span>
+<span><span class="co">## of the five models.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="anisotropy" class="level2" data-number="5.3"><h2 data-number="5.3" class="anchored" data-anchor-id="anisotropy">
+<span class="header-section-number">5.3</span> Anisotropy</h2>
+<p>By default, <code><a href="https://usepa.github.io/spmodel/reference/splm.html">splm()</a></code> uses isotropic spatial covariance. Spatial covariance is isotropic if it behaves similarly in all directions. A spatial covariance is (geometrically) anisotropic if it does not behave similarly in all directions. Anisotropic models require estimation of two additional parameters: <code>rotate</code> and <code>scale</code>, which control the behavior of the spatial covariance as a function of distance and direction.</p>
+<div class="cell">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">aniso</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>,</span>
+<span>              data <span class="op">=</span> <span class="va">moss</span>, spcov_type <span class="op">=</span> <span class="st">"exponential"</span>,</span>
+<span>              anisotropy <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">aniso</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; splm(formula = log_Zn ~ log_dist2road, data = moss, spcov_type = "exponential", </span></span>
+<span><span class="co">#&gt;     anisotropy = TRUE)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients (fixed):</span></span>
+<span><span class="co">#&gt;   (Intercept)  log_dist2road  </span></span>
+<span><span class="co">#&gt;         9.548         -0.546  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients (exponential spatial covariance):</span></span>
+<span><span class="co">#&gt;        de         ie      range     rotate      scale  </span></span>
+<span><span class="co">#&gt; 3.561e-01  6.812e-02  8.732e+03  2.435e+00  4.753e-01</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can again use glances to compare the model that allows for anisotropy with the isotropic model:</p>
+<div class="cell">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://usepa.github.io/spmodel/reference/glances.html">glances</a></span><span class="op">(</span><span class="va">spmod</span>, <span class="va">aniso</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 10</span></span>
+<span><span class="co">#&gt;   model     n     p  npar value   AIC  AICc logLik deviance pseudo.r.squared</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;            &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 aniso   365     2     5  362.  372.  372.  -181.     363.            0.705</span></span>
+<span><span class="co">#&gt; 2 spmod   365     2     3  367.  373.  373.  -184.     363             0.683</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The anisotropic model does have lower AIC and AICc than the isotropic model, indicating a better fit. However, the reduction in AIC and AICc is quite small, so we may still prefer the isotropic model for simplicity and interpretability.</p>
+<div class="callout callout-style-default callout-important no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Visualize the anisotropic level curve for <code>aniso</code> using <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>. Hint: Run <code><a href="https://usepa.github.io/spmodel/reference/plot.spmodel.html">?plot.spmodel</a></code> or visit <a href="https://usepa.github.io/spmodel/reference/plot.spmodel.html">this link</a>. Which direction does the model predict two responses will be more correlated?</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">aniso</span>, which <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="additional-features_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>A clockwise rotation of this level curve by <code>rotate</code> followed by a scaling of the minor axis by the reciprocal of <code>scale</code> yields a spatial covariance that is isotropic.</p>
+</div>
+</div>
+</div>
+</section><section id="partition-factors" class="level2" data-number="5.4"><h2 data-number="5.4" class="anchored" data-anchor-id="partition-factors">
+<span class="header-section-number">5.4</span> Partition Factors</h2>
+<p>A partition factor is a categorical (or factor) variable that forces observations in different levels of the partition factor to be uncorrelated. The <code>year</code> variable in <code>moss</code> has two levels, <code>2001</code> and <code>2006</code>, which correspond to the year of measurement. Suppose the goal is to fit a model that assumes observations from the same year are spatially correlated but observations from different years are not spatially correlated. In this context, <code>year</code> is a partition factor. We fit this model by running</p>
+<div class="cell">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">part</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>,</span>
+<span>             data <span class="op">=</span> <span class="va">moss</span>, spcov_type <span class="op">=</span> <span class="st">"exponential"</span>,</span>
+<span>             partition_factor <span class="op">=</span> <span class="op">~</span> <span class="va">year</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Like the <code>formula</code> and <code>random</code> arguments, the <code>partition_factor</code> argument requires a formula object.</p>
+</section><section id="fixing-covariance-parameters" class="level2" data-number="5.5"><h2 data-number="5.5" class="anchored" data-anchor-id="fixing-covariance-parameters">
+<span class="header-section-number">5.5</span> Fixing Covariance Parameters</h2>
+<p>By default, <code><a href="https://usepa.github.io/spmodel/reference/splm.html">splm()</a></code> estimates all unknown covariance parameters. However, we can also fix covariance parameters at known values with the <code>spcov_initial</code> argument for spatial covariance parameters and with the <code>randcov_initial</code> argument for non-spatial covariance parameters.</p>
+<p>As an example, suppose that we want to fit a <code>"spherical"</code> covariance model to the moss data, but that, we want to fix the <code>range</code> at <code>20000</code> units so that errors from spatial locations more than 20000 units apart are not spatially correlated. We first create an <code>spcov_initial</code> object with the <code><a href="https://usepa.github.io/spmodel/reference/spcov_initial.html">spcov_initial()</a></code> function:</p>
+<div class="cell">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">init_spher</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/spcov_initial.html">spcov_initial</a></span><span class="op">(</span><span class="st">"spherical"</span>, range <span class="op">=</span> <span class="fl">20000</span>, known <span class="op">=</span> <span class="st">"range"</span><span class="op">)</span></span>
+<span><span class="va">init_spher</span></span>
+<span><span class="co">#&gt; $initial</span></span>
+<span><span class="co">#&gt; range </span></span>
+<span><span class="co">#&gt; 20000 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $is_known</span></span>
+<span><span class="co">#&gt; range </span></span>
+<span><span class="co">#&gt;  TRUE </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "spherical"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Within the function call, we specify that, for a <code>"spherical"</code> covariance, we would like to set the <code>range</code> parameter to <code>20000</code> and for that value to be known and therefore fixed in any subsequent estimation. We then provide <code>init_spher</code> as an argument to <code>spcov_initial</code> in <code><a href="https://usepa.github.io/spmodel/reference/splm.html">splm()</a></code>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>, data <span class="op">=</span> <span class="va">moss</span>,</span>
+<span>     spcov_initial <span class="op">=</span> <span class="va">init_spher</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; splm(formula = log_Zn ~ log_dist2road, data = moss, spcov_initial = init_spher)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients (fixed):</span></span>
+<span><span class="co">#&gt;   (Intercept)  log_dist2road  </span></span>
+<span><span class="co">#&gt;        9.7194        -0.5607  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients (spherical spatial covariance):</span></span>
+<span><span class="co">#&gt;        de         ie      range  </span></span>
+<span><span class="co">#&gt; 4.545e-01  8.572e-02  2.000e+04</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When <code>spcov_initial</code> is provided, <code>spcov_type</code> is not a necessary argument to <code><a href="https://usepa.github.io/spmodel/reference/splm.html">splm()</a></code>.</p>
+<div class="callout callout-style-default callout-important no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Fit a <code>"spherical"</code> spatial covariance model to the <code>moss</code> data set without a nugget effect (i.e., the model should have the <code>ie</code> independent variance parameter set to <code>0</code> and treated as <code>known</code>). Verify in the summary output that the <code>ie</code> is indeed <code>0</code> for this model.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">init_no_ie</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/spcov_initial.html">spcov_initial</a></span><span class="op">(</span><span class="st">"spherical"</span>, ie <span class="op">=</span> <span class="fl">0</span>, known <span class="op">=</span> <span class="st">"ie"</span><span class="op">)</span></span>
+<span><span class="va">no_ie</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>, data <span class="op">=</span> <span class="va">moss</span>,</span>
+<span>              spcov_initial <span class="op">=</span> <span class="va">init_no_ie</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">no_ie</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; splm(formula = log_Zn ~ log_dist2road, data = moss, spcov_initial = init_no_ie)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Residuals:</span></span>
+<span><span class="co">#&gt;     Min      1Q  Median      3Q     Max </span></span>
+<span><span class="co">#&gt; -3.1766 -1.8420 -1.2975 -0.7249  0.6577 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients (fixed):</span></span>
+<span><span class="co">#&gt;               Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; (Intercept)   10.27912   28.99660   0.354    0.723    </span></span>
+<span><span class="co">#&gt; log_dist2road -0.56642    0.01974 -28.693   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Pseudo R-squared: 0.6967</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients (spherical spatial covariance):</span></span>
+<span><span class="co">#&gt;        de        ie     range </span></span>
+<span><span class="co">#&gt; 8.433e+02 0.000e+00 3.699e+07</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="random-forest-spatial-residual-models" class="level2" data-number="5.6"><h2 data-number="5.6" class="anchored" data-anchor-id="random-forest-spatial-residual-models">
+<span class="header-section-number">5.6</span> Random Forest Spatial Residual Models</h2>
+<p>Random forests are a popular machine-learning modeling tool. The random forest spatial residual model available in <code>spmodel</code> combines random forest modeling and spatial linear models. First, the model is fit using random forests and fitted values are obtained. Then the response residuals are used to fit a spatial linear model. Predictions at unobserved locations are computed as the sum of the random forest prediction and the predicted (i.e., Kriged) response residual from the spatial linear model. Suppose we split the <code>moss</code> data into training and test data sets, with the goal of predicting <code>log_Zn</code> in the test data.</p>
+<div class="cell">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">NROW</a></span><span class="op">(</span><span class="va">moss</span><span class="op">)</span></span>
+<span><span class="va">n_train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">0.75</span> <span class="op">*</span> <span class="va">n</span><span class="op">)</span></span>
+<span><span class="va">n_test</span> <span class="op">&lt;-</span> <span class="va">n</span> <span class="op">-</span> <span class="va">n_train</span></span>
+<span><span class="va">train_index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">n</span>, size <span class="op">=</span> <span class="va">n_train</span><span class="op">)</span></span>
+<span><span class="va">moss_train</span> <span class="op">&lt;-</span> <span class="va">moss</span><span class="op">[</span><span class="va">train_index</span>, , <span class="op">]</span></span>
+<span><span class="va">moss_test</span> <span class="op">&lt;-</span> <span class="va">moss</span><span class="op">[</span><span class="op">-</span><span class="va">train_index</span>, , <span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We fit a random forest spatial residual model to the test data by running</p>
+<div class="cell">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rfsrmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splmRF.html">splmRF</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>, <span class="va">moss_train</span>,</span>
+<span>                  spcov_type <span class="op">=</span> <span class="st">"exponential"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We make predictions for the test data by running</p>
+<div class="cell">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># results omitted</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">rfsrmod</span>, <span class="va">moss_test</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-important no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> to store the random forest spatial residual predictions of <code>log_Zn</code> at locations in the test data and then compute the mean-squared prediction error.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">rfsrmod</span>, newdata <span class="op">=</span> <span class="va">moss_test</span><span class="op">)</span></span>
+<span><span class="va">errors</span> <span class="op">&lt;-</span> <span class="va">moss_test</span><span class="op">$</span><span class="va">log_Zn</span> <span class="op">-</span> <span class="va">preds</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">errors</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.1831002</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="r-code-appendix" class="level2" data-number="5.7"><h2 data-number="5.7" class="anchored" data-anchor-id="r-code-appendix">
+<span class="header-section-number">5.7</span> R Code Appendix</h2>
+<div class="cell">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://usepa.github.io/spmodel/">spmodel</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="va">spmods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>, data <span class="op">=</span> <span class="va">moss</span>,</span>
+<span>              spcov_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"exponential"</span>, <span class="st">"gaussian"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">spmods</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://usepa.github.io/spmodel/reference/glances.html">glances</a></span><span class="op">(</span><span class="va">spmods</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">spmods</span><span class="op">$</span><span class="va">gaussian</span>, conf.int <span class="op">=</span> <span class="cn">TRUE</span>, conf.level <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html">confint</a></span><span class="op">(</span><span class="va">spmods</span><span class="op">$</span><span class="va">gaussian</span>, level <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span>
+<span><span class="va">moss</span></span>
+<span><span class="va">randint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>,</span>
+<span>                data <span class="op">=</span> <span class="va">moss</span>, spcov_type <span class="op">=</span> <span class="st">"exponential"</span>,</span>
+<span>                random <span class="op">=</span> <span class="op">~</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">sample</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">randint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>,</span>
+<span>                      data <span class="op">=</span> <span class="va">moss</span>, spcov_type <span class="op">=</span> <span class="st">"exponential"</span>,</span>
+<span>                      random <span class="op">=</span> <span class="op">~</span> <span class="va">sample</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">randint</span><span class="op">)</span></span>
+<span><span class="va">spmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>,</span>
+<span>              data <span class="op">=</span> <span class="va">moss</span>, spcov_type <span class="op">=</span> <span class="st">"exponential"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://usepa.github.io/spmodel/reference/glances.html">glances</a></span><span class="op">(</span><span class="va">spmod</span>, <span class="va">randint</span><span class="op">)</span></span>
+<span><span class="va">yearint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>,</span>
+<span>                      data <span class="op">=</span> <span class="va">moss</span>, spcov_type <span class="op">=</span> <span class="st">"exponential"</span>,</span>
+<span>                      random <span class="op">=</span> <span class="op">~</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">sample</span> <span class="op">+</span> <span class="va">year</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">yearsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>,</span>
+<span>                      data <span class="op">=</span> <span class="va">moss</span>, spcov_type <span class="op">=</span> <span class="st">"exponential"</span>,</span>
+<span>                      random <span class="op">=</span> <span class="op">~</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">sample</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>                       <span class="op">(</span><span class="va">log_dist2road</span> <span class="op">|</span> <span class="va">year</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://usepa.github.io/spmodel/reference/glances.html">glances</a></span><span class="op">(</span><span class="va">spmod</span>, <span class="va">randint</span>, <span class="va">yearint</span>, <span class="va">yearsl</span><span class="op">)</span></span>
+<span><span class="va">nospcov</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>,</span>
+<span>                    data <span class="op">=</span> <span class="va">moss</span>, spcov_type <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>                    random <span class="op">=</span> <span class="op">~</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">sample</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>                      <span class="op">(</span><span class="va">log_dist2road</span> <span class="op">|</span> <span class="va">year</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://usepa.github.io/spmodel/reference/glances.html">glances</a></span><span class="op">(</span><span class="va">spmod</span>, <span class="va">randint</span>, <span class="va">yearint</span>, <span class="va">yearsl</span>, <span class="va">nospcov</span><span class="op">)</span></span>
+<span><span class="co">## the model with no explicit spatial covariance has the worst fit </span></span>
+<span><span class="co">## of the five models.</span></span>
+<span><span class="va">aniso</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>,</span>
+<span>              data <span class="op">=</span> <span class="va">moss</span>, spcov_type <span class="op">=</span> <span class="st">"exponential"</span>,</span>
+<span>              anisotropy <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">aniso</span></span>
+<span><span class="fu"><a href="https://usepa.github.io/spmodel/reference/glances.html">glances</a></span><span class="op">(</span><span class="va">spmod</span>, <span class="va">aniso</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">aniso</span>, which <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span>
+<span><span class="va">part</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>,</span>
+<span>             data <span class="op">=</span> <span class="va">moss</span>, spcov_type <span class="op">=</span> <span class="st">"exponential"</span>,</span>
+<span>             partition_factor <span class="op">=</span> <span class="op">~</span> <span class="va">year</span><span class="op">)</span></span>
+<span><span class="va">init_spher</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/spcov_initial.html">spcov_initial</a></span><span class="op">(</span><span class="st">"spherical"</span>, range <span class="op">=</span> <span class="fl">20000</span>, known <span class="op">=</span> <span class="st">"range"</span><span class="op">)</span></span>
+<span><span class="va">init_spher</span></span>
+<span><span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>, data <span class="op">=</span> <span class="va">moss</span>,</span>
+<span>     spcov_initial <span class="op">=</span> <span class="va">init_spher</span><span class="op">)</span></span>
+<span><span class="va">init_no_ie</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/spcov_initial.html">spcov_initial</a></span><span class="op">(</span><span class="st">"spherical"</span>, ie <span class="op">=</span> <span class="fl">0</span>, known <span class="op">=</span> <span class="st">"ie"</span><span class="op">)</span></span>
+<span><span class="va">no_ie</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splm.html">splm</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>, data <span class="op">=</span> <span class="va">moss</span>,</span>
+<span>              spcov_initial <span class="op">=</span> <span class="va">init_no_ie</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">no_ie</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">NROW</a></span><span class="op">(</span><span class="va">moss</span><span class="op">)</span></span>
+<span><span class="va">n_train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">0.75</span> <span class="op">*</span> <span class="va">n</span><span class="op">)</span></span>
+<span><span class="va">n_test</span> <span class="op">&lt;-</span> <span class="va">n</span> <span class="op">-</span> <span class="va">n_train</span></span>
+<span><span class="va">train_index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">n</span>, size <span class="op">=</span> <span class="va">n_train</span><span class="op">)</span></span>
+<span><span class="va">moss_train</span> <span class="op">&lt;-</span> <span class="va">moss</span><span class="op">[</span><span class="va">train_index</span>, , <span class="op">]</span></span>
+<span><span class="va">moss_test</span> <span class="op">&lt;-</span> <span class="va">moss</span><span class="op">[</span><span class="op">-</span><span class="va">train_index</span>, , <span class="op">]</span></span>
+<span><span class="va">rfsrmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://usepa.github.io/spmodel/reference/splmRF.html">splmRF</a></span><span class="op">(</span><span class="va">log_Zn</span> <span class="op">~</span> <span class="va">log_dist2road</span>, <span class="va">moss_train</span>,</span>
+<span>                  spcov_type <span class="op">=</span> <span class="st">"exponential"</span><span class="op">)</span></span>
+<span><span class="co"># results omitted</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">rfsrmod</span>, <span class="va">moss_test</span><span class="op">)</span></span>
+<span><span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">rfsrmod</span>, newdata <span class="op">=</span> <span class="va">moss_test</span><span class="op">)</span></span>
+<span><span class="va">errors</span> <span class="op">&lt;-</span> <span class="va">moss_test</span><span class="op">$</span><span class="va">log_Zn</span> <span class="op">-</span> <span class="va">preds</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">errors</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-bates2015lme4" class="csl-entry" role="listitem">
+Bates, Douglas, Martin Mächler, Ben Bolker, and Steve Walker. 2015. <span>“Fitting Linear Mixed-Effects Models Using <span class="nocase">lme4</span>.”</span> <em>Journal of Statistical Software</em> 67 (1): 1–48. <a href="https://doi.org/10.18637/jss.v067.i01">https://doi.org/10.18637/jss.v067.i01</a>.
+</div>
+<div id="ref-pinheiro2006mixed" class="csl-entry" role="listitem">
+Pinheiro, José, and Douglas Bates. 2006. <em>Mixed-Effects Models in <span>S</span> and <span>S-PLUS</span></em>. Springer science &amp; business media.
+</div>
+</div>
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./prediction.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Prediction</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./large-data-sets.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Large Data Sets</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">spmodel workshop materials written by Michael Dumelle, Matt Higham, and Jay Ver Hoef</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">This book was built with <a href="https://quarto.org/">Quarto</a>.</div>
+  </div>
+</footer>
+
+
+</body></html>

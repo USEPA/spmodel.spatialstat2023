@@ -1,0 +1,181 @@
+---
+title: "Spatial Statistical Modeling and Prediction in R Using spmodel"
+subtitle: "Spatial Statistics 2023: Climate and the Environment"
+date: July 20, 2023
+format:
+  revealjs:
+    author: 
+      - "Michael Dumelle (presenting)"
+      - "Matt Higham"
+      - "Jay M Ver Hoef"
+    institute: 
+      - "EPA (USA)"
+      - "St. Lawrence University (USA)"
+      - "NOAA (USA)"
+    slide-number: true
+    preview-links: true
+    transition: fade
+    theme: [default, slides.scss]
+    smaller: false
+    auto-stretch: true
+    code-link: true
+    incremental: false
+execute: 
+  echo: true
+embed-resources: true
+bibliography: references.bib
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+# set width of code output
+options(width = 80)
+
+# load background packages
+library(spmodel)
+library(ggplot2)
+```
+
+## Disclaimer
+
+The views expressed in this workshop are those of the authors and do not necessarily represent the views or policies of the U.S. Environmental Protection Agency or the U.S. National Oceanic and Atmospheric Administration. Any mention of trade names, products, or services does not imply an endorsement by the U.S. government, the U.S. Environmental Protection Agency, or the U.S. National Oceanic and Atmospheric Administration. The U.S. Environmental Protection Agency and the U.S. National Oceanic and Atmospheric Administration do not endorse any commercial products, services, or enterprises.
+
+## What is `spmodel`?
+
+`spmodel` is an `R` package to fit, summarize, and predict for a variety of spatial statistical models. Some of the things that `spmodel` can do include:
+
+::: {.incremental}
+
+* Fit spatial linear and generalized linear models for point-referenced and areal (lattice) data
+* Compare model fits and inspect model diagnostics
+* Predict at unobserved spatial locations (i.e., Kriging)
+* And much more!
+
+:::
+
+## Why use `spmodel`?
+
+There are many great spatial modeling packages in `R`. A few reasons to use `spmodel` for spatial analysis are that:
+
+::: {.incremental}
+
+* `spmodel` syntax is similar to base `R` syntax for functions like `lm()`, `glm()`, `summary()`, and `predict()`, making the transition from fitting non-spatial models to spatial models relatively seamless.
+* There are a wide variety of `spmodel` capabilities that give the user significant control over the specific spatial model being fit.
+* `spmodel` is compatible with other modern `R` packages like `broom` and `sf`.
+
+:::
+
+# A Basic Overview
+
+## Goals
+
+::: goals
+
+1. Fit a spatial linear model using `splm()`.
+2. Tidy, glance at, and augment the fitted model.
+3. Predict for unobserved locations (i.e., Kriging).
+4. Explore other `spmodel` features and provide resources to learn more
+
+:::
+
+## The Sulfate Data
+
+The `sulfate` data in `spmodel` contains data on 197 sulfate measurements in the continental United States
+
+```{r}
+head(sulfate)
+```
+
+## The Sulfate Data
+
+```{r}
+#| label: fig-sulfate
+#| fig-cap: "Distribution of sulfate data."
+#| echo: false
+
+ggplot(sulfate, aes(color = sulfate)) +
+  geom_sf(size = 3) +
+  scale_color_viridis_c(limits = c(0, 45)) +
+  theme_gray(base_size = 18)
+```
+
+## Fitting a Model
+
+We fit and summarize a spatial linear model with an intercept by running
+```{r}
+spmod <- splm(sulfate ~ 1, data = sulfate, spcov_type = "exponential")
+summary(spmod)
+```
+
+## The `broom` Functions
+
+Tidy the fixed effect output
+
+```{r}
+tidy(spmod)
+```
+
+Glance at the model fit
+
+```{r}
+glance(spmod)
+```
+
+Augment the data with model diagnostics
+
+```{r}
+#| output-location: slide
+
+augment(spmod)
+```
+
+## Prediction (i.e., Kriging)
+
+```{r}
+#| results: hide
+
+predict(spmod, newdata = sulfate_preds)
+```
+
+Augment prediction data
+
+```{r}
+augment(spmod, newdata = sulfate_preds)
+```
+
+## Prediction (i.e., Kriging)
+
+Visualize predictions
+
+```{r}
+#| label: fig-sulfate-pred
+#| fig-cap: "Distribution of sulfate data predictions."
+#| echo: false
+
+aug_preds <- augment(spmod, newdata = sulfate_preds)
+ggplot(aug_preds, aes(color = .fitted)) +
+  geom_sf(size = 3) +
+  scale_color_viridis_c(limits = c(0, 45)) +
+  theme_gray(base_size = 18)
+```
+
+## Other Features
+
+Other `spmodel` features include:
+
+::: {.incremental}
+1. Support for non-spatial random effects, anisotropy, and large data sets
+2. Support for spatial generalized linear models (`spglm()`)
+3. Support for areal (i.e., lattice) data (`spautor()`; `spgautor()`)
+4. Simulating spatially-dependent data from various response distributions (e.g., `sprnorm()`)
+5. Much more!
+:::
+
+## Learn More
+
+* Visit our website at [https://usepa.github.io/spmodel/](https://usepa.github.io/spmodel/)
+* Visit our workshop workbook at INSERT LINK
+* Please reach out with comments / questions / suggestions / bugs (Dumelle.Michael@epa.gov)
+* Thank you for attending and enjoy the rest of the conference!

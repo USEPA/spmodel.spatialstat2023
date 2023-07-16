@@ -1,0 +1,105 @@
+# The Basics {#sec-basics}
+
+```{r source_r, echo = FALSE}
+source("_common.R")
+```
+
+Throughout this section, we practice using some of the the main `spmodel ` features to fit spatial linear models, inspect model fit, and make predictions (i.e., Kriging). We will use the `spmodel` package and `ggplot2` package:
+
+```{r}
+library(spmodel)
+library(ggplot2)
+```
+
+__Goals__: 
+
+* Fit a spatial linear model using `splm()`.
+* Tidy, glance at, and augment the fitted model.
+* Predict for unobserved locations (i.e., Kriging).
+
+:::{.callout-note}
+You may click on any of the functions in this book to be directed to their respective documentation. For example, clicking on `splm()` takes you to the documentation page for the `splm()` function on our website.
+:::
+
+## Fit a Spatial Linear Model 
+
+A spatial linear model is a statistical linear model that incorporates spatial covariance among neighboring observations. Formally incorporating this spatial covariance generally yields models that more realistically represent spatial processes. 
+
+The `sulfate` data in `spmodel` contains data on 197 sulfate measurements in the conterminous United States. We visualize the sulfate measurements by running
+```{r}
+#| label: fig-sulfate
+#| fig-cap: "Distribution of sulfate data."
+ggplot(sulfate, aes(color = sulfate)) +
+  geom_sf(size = 2) +
+  scale_color_viridis_c(limits = c(0, 45)) +
+  theme_gray(base_size = 14)
+```
+
+We fit a spatial linear model with an intercept by running
+```{r}
+spmod <- splm(sulfate ~ 1, data = sulfate, spcov_type = "exponential")
+```
+
+The summary of `spmod` contains several useful pieces of information we will discuss in more detail in @sec-model-fitting:
+```{r}
+summary(spmod)
+```
+
+## Meet the `broom` functions: `tidy()`, `glance()`, and `augment()`
+
+The `tidy()`, `glance()`, and `augment()` functions popularized by the `broom` package [@robinson2021broom] provide convenient tools for inspecting model fit. The `tidy()` function tidies the fixed effect model output into a `tibble` (i.e., a special `data.frame()`):
+```{r}
+tidy(spmod)
+```
+
+The `glance()` function glances at the model fit:
+```{r}
+glance(spmod)
+```
+
+And the `augment()` function augments the data used to fit the model with diagnostics:
+```{r}
+augment(spmod)
+```
+
+## Prediction
+
+The `sulfate_preds` data in `spmodel` contains 100 locations at which to predict sulfate. We obtain these predictions by running
+```{r}
+#| results: hide
+
+predict(spmod, newdata = sulfate_preds)
+```
+
+The `augment()` function can also be used to augment prediction data with predictions:
+```{r}
+aug_preds <- augment(spmod, newdata = sulfate_preds)
+print(aug_preds)
+```
+
+These predictions are then readily visualized:
+```{r}
+#| label: fig-sulfate-preds
+#| fig-cap: "Sulfate predictions at several unobserved locations."
+ggplot(aug_preds, aes(color = .fitted)) +
+  geom_sf(size = 2) +
+  scale_color_viridis_c(limits = c(0, 45)) +
+  theme_gray(base_size = 14)
+```
+
+They follow a similar pattern as the observed data.
+
+::: {.callout-important icon="false"}
+## Exercise
+ Visit `spmodel's` website at [https://usepa.github.io/spmodel](https://usepa.github.io/spmodel). Navigate to the "References" tab and explore some other functions available in `spmodel`.
+:::
+
+## R Code Appendix
+
+```{r get-labels, echo = FALSE}
+labs = knitr::all_labels()
+labs = setdiff(labs, c("source_r", "get-labels"))
+```
+
+```{r all-code, ref.label=labs, eval = FALSE}
+```
