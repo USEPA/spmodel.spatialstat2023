@@ -5,7 +5,7 @@
 library(emo)
 ```
 
-Hello `r emo::ji("wave")` and welcome! The purpose of this site is to provide workshop materials for the `spmodel` workshop at the 2023 Spatial Statistics Conference `r emo::ji("earth_americas")`. Slides that accompany this workshop can be found at INSERT LINK HERE.
+Hello `r emo::ji("wave")` and welcome! The purpose of this site is to provide workshop materials for the `spmodel` workshop at the 2023 Spatial Statistics Conference `r emo::ji("earth_americas")`. Slides that accompany this workshop are available for download [linked here](https://github.com/USEPA/spmodel.spatialstat2023/blob/main/spmodel-slides-workshop.html). Slides that accompany a short presentation given elsewhere at the conference are available for download [linked here](https://github.com/USEPA/spmodel.spatialstat2023/blob/main/spmodel-slides-intro.html). Slides are downloaded by clicking the "Download raw file" button via the ellipsis or downward arrow symbol on the right side of the screen.
 
 __What is `spmodel`?__ The `spmodel` `R` package [@dumelle2023spmodel] can be used to fit, summarize, and predict for a variety of spatial statistical models. Some of the things that `spmodel` can do include:
 

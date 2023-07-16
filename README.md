@@ -1,6 +1,6 @@
 # Welcome! 
 
-Welcome to the repository for `spmodel` presentation(s) at the 2023 Spatial Statistics Conference in Boulder, CO, USA. For the workshop's workbook, visit here. For the workshop's slides, visit here. For the oral presentation's slides, visit here.
+Welcome to the repository for `spmodel` presentation(s) at the 2023 Spatial Statistics Conference in Boulder, CO, USA. To view the workshop's accompanying workbook, [visit here](https://usepa.github.io/spmodel.spatialstat2023/). To download the workshop's slides, [visit here](https://github.com/USEPA/spmodel.spatialstat2023/blob/main/spmodel-slides-workshop.html). To download the short oral presentation's slides, [visit here](https://github.com/USEPA/spmodel.spatialstat2023/blob/main/spmodel-slides-intro.html).
 
 ## Disclaimer
 
