@@ -464,7 +464,7 @@ The `augment()` function returns columns with
 -   `.std.resid`, the standardized residual
 
 ```{r}
-#| results: false
+#| output-location: slide
 augment(spmod)
 ```
 
