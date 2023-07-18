@@ -54,8 +54,8 @@ library(ggplot2)
 ```
 
 2.  Please visit [https://usepa.github.io/spmodel.spatialstat2023/](https://usepa.github.io/spmodel.spatialstat2023/) to view the workshop's accompanying workbook
-3.  (Optional) Download the workshop's slides by following link in the first paragraph of the workbook's introduction and then clicking the "Download raw file" button via the ellipsis or downward arrow symbol on the right side of the screen
-4.  Follow along and have fun!
+<!-- 3.  (Optional) Download the workshop's slides by following link in the first paragraph of the workbook's introduction and then clicking the "Download raw file" button via the ellipsis or downward arrow symbol on the right side of the screen -->
+3.  Follow along and have fun!
 
 ## Who Are We?
 
@@ -319,6 +319,14 @@ ggplot(moss, aes(color = log_Zn)) +
 For this section, we are going to use the `moss` data set, which is an `sf` object in the `spmodel` package. In particular, we are interested in modeling the log Zinc concentration in moss tissue for some moss samples that were collected near a mining road in Alaska. From the figure, we can make out where this mining road is, running from southwest to northeast. And also from the figure, we might anticipate that distance to the road may be an important predictor, as it seems as though moss samples collected closer to the road tend to have more Zinc concentration than moss samples that are further from the road. 
 :::
 
+## The Moss Data
+
+```{r}
+#| echo: false
+moss |> dplyr::slice(1:3) |> dplyr::select(sideroad, log_dist2road, log_Zn) |>
+  knitr::kable(digits = 2)
+```
+
 ## The `splm()` function
 
 The `splm()` function shares syntactic structure with the `lm()` function and generally requires at least three arguments
@@ -510,6 +518,14 @@ To show how to make predictions for unobserved spatial locations with `spmodel`,
 
 Following slide: The moose data contains the results from a survey from a region in Alaska, where each row corresponds to a spatial location in the survey. The response is the moose `count`, and, we can see from the map, that most of the locations in the data set have a low number of observed moose, but, there is one location in particular in the southwest where over 40 moose were observed.
 :::
+
+## The Moose Data
+
+```{r}
+#| echo: false
+moose |> dplyr::slice(1:3) |>
+  knitr::kable(digits = 0)
+```
 
 ## The Moose Prediction Data
 
