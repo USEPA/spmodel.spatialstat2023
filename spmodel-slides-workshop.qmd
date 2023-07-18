@@ -411,6 +411,21 @@ Compare your anova model output to the anova model output of your neighbor(s). A
 countdown(minutes = 3)
 ```
 
+## Tidying Output
+
+The `tidy()` function tidies fixed effect model output into a convenient `tibble` (a special `data.frame`)
+
+```{r}
+tidy(spmod)
+```
+
+It can also be used to tidy spatial covariance parameters
+
+```{r}
+tidy(spmod, effects = "spcov")
+```
+
+
 ## Model Fit
 
 The `glance()` function returns columns with the sample size (`n`), number of fixed effects (`p`), number of estimated covariance parameters (`npar`), optimization criteria minimum (`value`), AIC (`AIC)`, AICc (`AICc`), log-likelihood (`loglik`), deviance (`deviance`), and pseudo R-squared (`pseudo.r.squared`)
@@ -837,7 +852,7 @@ See workbook for an example of prediction using random forest spatial residual m
 
 ## Large Data Challenges
 
--   Inversion of $\boldsymbol{\Sigma}$ for data sets with around 10,000 or more observations is challenging (and often infeasible) on a standard computer
+-   Inversion of $\boldsymbol{\Sigma}$ for data sets with around 10,000 or more observations is challenging (and often unfeasible) on a standard computer
 -   `spmodel` implements "local" spatial indexing [@hoef2023indexing] for model fitting
     -   Induce some sparsity in the covariance matrix
     -   Set `local = TRUE` in `splm()`
@@ -1038,7 +1053,7 @@ ggplot(sulfate, aes(color = p)) +
 ## A Caution
 
 * Simulating spatial data in `spmodel` requires the Cholesky decomposition of the covariance matrix, which can take awhile for sample sizes exceeding 10,000
-* Regardless of the number of realizations simulated, this Cholesky decompsition is only needed once
+* Regardless of the number of realizations simulated, this Cholesky decomposition is only needed once
 * This means that simulating many realizations (via `samples`) takes nearly the same time as simulating just one.
 
 # Areal Data
@@ -1145,7 +1160,7 @@ countdown(minutes = 5)
 -   Thank you so much for attending
 -   Please reach out with comments / questions / suggestions / bugs (Dumelle.Michael\@epa.gov)
 -   A6.02 16:00 - 16:15 Thursday, 20 July, 2023 UMC Glenn Miller Ballroom Middle
-    - Slides available for download [https://github.com/USEPA/spmodel.spatialstat2023/blob/main/spmodel-slides-intro.html](https://github.com/USEPA/spmodel.spatialstat2023/blob/main/spmodel-slides-intro.html)
+    - Slides available for download (instructions in the workshop's "Introduction")
 
 ---
 nocite: |
