@@ -377,6 +377,20 @@ $$ {#eq-splm}
 Going back to the equation for the spatial linear model, the `de` value in the summary output is an estimate for sigma squared de, which is sometimes called the partial sill, the `ie` value in the summary output is an estimate for sigma squared ie, which is sometimes called the nugget, and the `range` value in the summary output is an estimate for phi, which controls how quickly the spatial correlation decays with distance.
 :::
 
+## Tidying Output
+
+The `tidy()` function tidies fixed effect model output into a convenient `tibble` (a special `data.frame`)
+
+```{r}
+tidy(spmod)
+```
+
+It can also be used to tidy spatial covariance parameters
+
+```{r}
+tidy(spmod, effects = "spcov")
+```
+
 ## Your Turn
 
 ::: task
@@ -409,20 +423,6 @@ Compare your anova model output to the anova model output of your neighbor(s). A
 #| echo: false
 
 countdown(minutes = 3)
-```
-
-## Tidying Output
-
-The `tidy()` function tidies fixed effect model output into a convenient `tibble` (a special `data.frame`)
-
-```{r}
-tidy(spmod)
-```
-
-It can also be used to tidy spatial covariance parameters
-
-```{r}
-tidy(spmod, effects = "spcov")
 ```
 
 
