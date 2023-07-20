@@ -44,11 +44,12 @@ The views expressed in this workshop are those of the authors and do not necessa
 
 ## What is `spmodel`?
 
-`spmodel` is an `R` package to fit, summarize, and predict for a variety of spatial statistical models. Some of the things that `spmodel` can do include:
+`spmodel` is an `R` package to fit, summarize, and predict for a variety of spatial statistical models. Some features:
 
 ::: {.incremental}
 
-* Fit spatial linear and generalized linear models for point-referenced and areal (lattice) data
+* Fit spatial linear and generalized linear models for point-referenced data; geostatistical models
+* Fit spatial linear and generalized linear models for areal (lattice) data; autoregressive models
 * Compare model fits and inspect model diagnostics
 * Predict at unobserved spatial locations (i.e., Kriging)
 * And much more!
@@ -101,7 +102,16 @@ ggplot(sulfate, aes(color = sulfate)) +
   theme_gray(base_size = 18)
 ```
 
-## Fitting a Model
+## Fitting a Non-Spatial Model
+
+We fit and summarize a non-spatial linear model with an intercept by running
+
+```{r}
+lmod <- lm(sulfate ~ 1, data = sulfate)
+summary(lmod)
+```
+
+## Fitting a Spatial Model
 
 We fit and summarize a spatial linear model with an intercept by running
 ```{r}
@@ -123,11 +133,11 @@ Glance at the model fit
 glance(spmod)
 ```
 
+## The `broom` Functions
+
 Augment the data with model diagnostics
 
 ```{r}
-#| output-location: slide
-
 augment(spmod)
 ```
 
@@ -166,16 +176,64 @@ ggplot(aug_preds, aes(color = .fitted)) +
 Other `spmodel` features include:
 
 ::: {.incremental}
-1. Support for non-spatial random effects, anisotropy, and large data sets
-2. Support for spatial generalized linear models (`spglm()`)
-3. Support for areal (i.e., lattice) data (`spautor()`; `spgautor()`)
-4. Simulating spatially-dependent data from various response distributions (e.g., `sprnorm()`)
-5. Much more!
+1. Support for fixing spatial covariance parameters, non-spatial random effects, anisotropy, and large data sets [@hoef2023indexing]
+1. Support for areal (i.e., lattice) data (`spautor()`)
+1. Simulating spatially-dependent data from various response distributions (e.g., `sprnorm()`)
+1. Much more!
 :::
+
+## The Moose Data
+
+The moose data in `spmodel` contains data on 218 observations of moose presence/absence in Alaska, USA
+
+```{r}
+head(moose)
+```
+
+## Fitting a Non-Spatial Generalized Linear Model
+
+Model moose presence as a function of elevation, strata, and their interaction
+
+```{r}
+#| output-location: slide
+gmod <- glm(presence ~ elev * strat, family = binomial, 
+            data = moose)
+summary(gmod)
+```
+
+## Fitting a Spatial Generalized Linear Model
+
+Following @hoef2023marginal
+
+```{r}
+#| output-location: slide
+spgmod <- spglm(presence ~ elev * strat, family = binomial, 
+            data = moose, spcov_type = "matern")
+summary(spgmod)
+```
+
+* Also for `spgautor()`
 
 ## Learn More
 
 * Visit our website at [https://usepa.github.io/spmodel/](https://usepa.github.io/spmodel/)
-* Visit our workshop workbook at [https://usepa.github.io/spmodel.spatialstat2023/](https://usepa.github.io/spmodel.spatialstat2023/)
-* Please reach out with comments / questions / suggestions / bugs (Dumelle.Michael@epa.gov)
-* Thank you for attending and enjoy the rest of the conference!
+* Visit our workbook at [https://usepa.github.io/spmodel.spatialstat2023/](https://usepa.github.io/spmodel.spatialstat2023/)
+* Please reach out with feedback (Dumelle.Michael@epa.gov)
+* Thank you for attending!
+
+```{r, out.width = "50%"}
+#| echo: false
+knitr::include_graphics("spmodel_web_qr.png")
+```
+
+## Learn More
+
+```{r}
+#| echo: false
+knitr::include_graphics("spmodel_web_qr.png")
+```
+
+# References
+
+::: {#refs}
+:::
