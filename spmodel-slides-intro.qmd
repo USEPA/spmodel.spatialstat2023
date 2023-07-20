@@ -48,8 +48,8 @@ The views expressed in this workshop are those of the authors and do not necessa
 
 ::: {.incremental}
 
-* Fit spatial linear and generalized linear models for point-referenced data; geostatistical models
-* Fit spatial linear and generalized linear models for areal (lattice) data; autoregressive models
+* Fit spatial linear and generalized linear models for point-referenced data; geostatistical models; distance
+* Fit spatial linear and generalized linear models for areal (lattice) data; autoregressive models; neighbors
 * Compare model fits and inspect model diagnostics
 * Predict at unobserved spatial locations (i.e., Kriging)
 * And much more!
